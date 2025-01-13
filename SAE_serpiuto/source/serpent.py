@@ -24,7 +24,7 @@ def Serpent(nom_joueur:str, num_joueur:int,points:int=0,positions:list=None,tps_
     Returns:
         dict: une dictionnaire contenant les informations du serpent
     """    
-    dico_serp={'non_joueur':nom_joueur,'num_joueur':num_joueur,'points':points,'positions':positions,'tps_s':tps_s,'tps_p':tps_p,'tps_m':tps_m,'direction':direction}
+    dico_serp={'nom_joueur':nom_joueur,'num_joueur':num_joueur,'points':points,'positions':positions,'tps_s':tps_s,'tps_p':tps_p,'tps_m':tps_m,'direction':direction}
     return dico_serp
 
 def get_nom(serpent:dict)->str:
@@ -152,7 +152,7 @@ def to_str(serpent:dict)->str:
     Returns:
         str: la chaine de caractères donnant les informations principales d'un serpent 
     """    
-    res_str=get_nom(serpent)+' -> '+get_points(serpent)+' s: '+get_temps_surpuissance(serpent)+' m: '+get_temps_mange_mur(serpent)+' p: '+get_temps_protection(serpent)
+    res_str=get_nom(serpent)+' -> '+str(get_points(serpent))+' s: '+str(get_temps_surpuissance(serpent))+' m: '+str(get_temps_mange_mur(serpent))+' p: '+str(get_temps_protection(serpent))
     return res_str
 
 
@@ -253,7 +253,7 @@ def serpent_2_str(serpent:dict, sep=";")->str:
     Returns:
         str: la chaine de caractères contenant les toutes informations du serpent
     """    
-    res_str_2=get_nom(serpent)+sep+get_num_joueur(serpent)+sep+get_points(serpent)+sep+get_temps_surpuissance(serpent)+sep+get_temps_mange_mur(serpent)+sep+get_temps_protection+'\n'+get_liste_pos(serpent)
+    res_str_2=get_nom(serpent)+sep+str(get_num_joueur(serpent))+sep+str(get_points(serpent))+sep+str(get_temps_surpuissance(serpent))+sep+str(get_temps_mange_mur(serpent))+sep+str((get_temps_protection))+'\n'+str(get_liste_pos(serpent))
     return res_str_2
 
 def serpent_from_str(la_chaine, sep=";")->dict:
