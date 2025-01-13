@@ -121,7 +121,7 @@ def ajouter_points(serpent:dict,nb_points:int):
         serpent (dict): le serpent considéré
         nb_points (int): le nombre de points à ajouter (si négatif enlève des points)
     """    
-    ...
+    serpent["points"] += nb_points 
 
 def set_liste_pos(serpent:dict, tete:list):
     """initialise la liste des positionsd'un serpent
@@ -199,7 +199,7 @@ def ajouter_temps_protection(serpent:dict, temps:int)->int:
     Returns:
         int: le nombre de tours total restant pour ce bonus
     """    
-    ...
+    serpent["tps_p"] += temps 
 
 def ajouter_temps_mange_mur(serpent:dict, temps:int)->int:
     """ajoute du temps supplémentaire pour le bonus mange mur
@@ -211,7 +211,7 @@ def ajouter_temps_mange_mur(serpent:dict, temps:int)->int:
     Returns:
         int: le nombre de tours total restant pour ce bonus
     """    
-    ...
+    serpent["tps_m"] += temps 
 
 def ajouter_temps_surpuissance(serpent:dict, temps:int)->int:
     """ajoute du temps supplémentaire pour le bonus surpuissance
@@ -223,7 +223,7 @@ def ajouter_temps_surpuissance(serpent:dict, temps:int)->int:
     Returns:
         int: le nombre de tours total restant pour ce bonus
     """    
-    ...
+    serpent["tps_s"] += temps 
 
 def maj_temps(serpent:dict):
     """Décrémente les temps restant pour les bonus de ce serpent
