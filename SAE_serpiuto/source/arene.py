@@ -858,4 +858,4 @@ def copy_arene(arene:dict)->dict:
     Returns:
         dict: la copie de l'arène passée en paramètre
     """
-    return arene.copy()
+    return arene_from_str(arene_2_str(arene)) 
