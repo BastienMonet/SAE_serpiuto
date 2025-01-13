@@ -27,7 +27,6 @@ def Serpent(nom_joueur:str, num_joueur:int,points:int=0,positions:list=None,tps_
     dico_serp={'non_joueur':nom_joueur,'num_joueur':num_joueur,'points':points,'positions':positions,'tps_s':tps_s,'tps_p':tps_p,'tps_m':tps_m,'direction':direction}
     return dico_serp
 
-
 def get_nom(serpent:dict)->str:
     """retourne le nom du joueur associé au serpent
 
@@ -284,4 +283,4 @@ def copy_serpent(serpent:dict)->dict:
     Returns:
     dict: la copie du serpent passé en paramètres
         """ 
-    return serpent.copy()     
+    return serpent_from_str(serpent_2_str(serpent))  
