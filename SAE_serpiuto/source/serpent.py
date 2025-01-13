@@ -255,6 +255,7 @@ def serpent_2_str(serpent:dict, sep=";")->str:
         str: la chaine de caractères contenant les toutes informations du serpent
     """    
     res_str_2=get_nom(serpent)+sep+get_num_joueur(serpent)+sep+get_points(serpent)+sep+get_temps_surpuissance(serpent)+sep+get_temps_mange_mur(serpent)+sep+get_temps_protection+'\n'+get_liste_pos(serpent)
+    return res_str_2
 
 def serpent_from_str(la_chaine, sep=";")->dict:
     """Reconstruit un serpent à partir d'une chaine de caractères
@@ -267,7 +268,10 @@ def serpent_from_str(la_chaine, sep=";")->dict:
     Returns:
         dict: Le serpent représenté dans la chaine de caractères
     """    
-    ...
+    liste_atribut=la_chaine.split('\n')
+    liste_atribut.split(sep)
+    return Serpent(liste_atribut[0],liste_atribut[1],liste_atribut[2],liste_atribut[6],liste_atribut[3],liste_atribut[5],liste_atribut[4],'N')
+
 
 def copy_serpent(serpent:dict)->dict:
     """fait une copie du serpent passer en paramètres
