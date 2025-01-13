@@ -219,4 +219,4 @@ def copy_partie(partie:dict)->dict:
     Returns:
         dict: la recopie de la partie passée en paramètres
     """
-    return partie_from_str(partie_2_str(serpent)) 
+    return partie_from_str(partie_2_str(partie)) 

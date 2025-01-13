@@ -215,4 +215,4 @@ def copy_case(case:dict)->dict:
     Returns:
         dict: la copie de la case passée en paramètre
     """ 
-    return case.copy()
+    return Case(est_mur(case),get_val_boite(case),get_proprietaire(case),get_temps_restant(case))
