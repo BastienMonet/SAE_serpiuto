@@ -140,7 +140,7 @@ def set_derniere_direction(serpent:dict, direction:str):
         direction (str): un des caractère N S E O
     """
     serpent['direction']=direction
-    
+
 def to_str(serpent:dict)->str:
     """produit une chaine de caractères contenant les informations principales d'un serpent sour la forme
     Joueur 1 -> 143 s:0 m:4 p:0
@@ -155,6 +155,7 @@ def to_str(serpent:dict)->str:
     """    
     res_str=get_nom(serpent)+' -> '+get_points(serpent)+' s: '+get_temps_surpuissance(serpent)+' m: '+get_temps_mange_mur(serpent)+' p: '+get_temps_protection(serpent)
     return res_str
+
 
 def get_temps_protection(serpent:dict)->int:
     """indique le temps restant pour le bonus protection
