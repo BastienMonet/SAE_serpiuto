@@ -24,7 +24,9 @@ def Serpent(nom_joueur:str, num_joueur:int,points:int=0,positions:list=None,tps_
     Returns:
         dict: une dictionnaire contenant les informations du serpent
     """    
-    ...
+    dico_serp={'non_joueur':nom_joueur,'num_joueur':num_joueur,'points':points,'positions':positions,'tps_s':tps_s,'tps_p':tps_p,'tps_m':tps_m,'direction':direction}
+    return dico_serp
+
 
 def get_nom(serpent:dict)->str:
     """retourne le nom du joueur associé au serpent
@@ -35,7 +37,7 @@ def get_nom(serpent:dict)->str:
     Returns:
         str: le nom du joueur associé à ce serpent
     """    
-    ...
+    return serpent['nom_joueur']
 
 def get_num_joueur(serpent:dict)->int:
     """retourne le numéro du joueur associé au serpent
@@ -46,7 +48,7 @@ def get_num_joueur(serpent:dict)->int:
     Returns:
         int: le numéro du joueur associé à ce serpent
     """   
-    ...
+    return serpent['num_joueur']
 
 def get_points(serpent:dict)->int:
     """retourne le nombre de points du joueur associé au serpent
@@ -57,7 +59,7 @@ def get_points(serpent:dict)->int:
     Returns:
         int: le nombre de points du joueur associé à ce serpent
     """   
-    ...
+    return 
 
 def get_liste_pos(serpent:dict)->list:
     """retourne la liste des positions occupées par le serpent sur l'arène. La première position étant la tête du serpent
