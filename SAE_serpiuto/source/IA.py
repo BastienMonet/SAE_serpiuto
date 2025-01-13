@@ -35,7 +35,7 @@ def directions_possibles(l_arene:dict,num_joueur:int)->str:
             pouvant être prise par le joueur. Attention il est possible
             qu'aucune direction ne soit possible donc la fonction peut retourner la chaine vide
     """    
-
+    return arene.directions_possibles(l_arene,num_joueur)
 
 def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):
     """Retourne un dictionnaire indiquant pour chaque direction possibles, 
@@ -51,8 +51,11 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):
             (distance,val_objet,prop) où distance indique le nombre de cases jusqu'à l'objet et id_objet
             val_obj indique la valeur de l'objet ou de la boite et prop indique le propriétaire de la boite
     """
-    ...
-
+    res_dict=dict()
+    direction=directions_possibles(l_arene,num_joueur)
+    for dir in direction:
+        delta_lig,delta_col=arene.DIRECTIONS[dir]
+        
 
 
 def mon_IA2(num_joueur:int, la_partie:dict)->str:
