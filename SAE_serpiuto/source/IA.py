@@ -36,8 +36,42 @@ def directions_possibles(l_arene:dict,num_joueur:int)->str:
             qu'aucune direction ne soit possible donc la fonction peut retourner la chaine vide
     """    
     return arene.directions_possibles(l_arene,num_joueur)
+def deplacement(liste,ligne,colonne):
+    """calcule la nouvelle position en fonction d'une liste de deplacement et d'un 
+    etat initial
 
-def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):
+    Args:
+        liste (_type_): _description_
+        ligne (_type_): _description_
+        colonne (_type_): _description_
+
+    Returns:
+        tuple: _description_
+    """    
+    nouveau_li=ligne.copy()
+    nouveau_co=colonne.copy()
+    for dir in liste:
+        if dir =="N":
+            ligne-=1
+        if dir =="S":
+            ligne+=1
+        if dir =="O":
+            colonne-=1
+        if dir =="E":
+            colonne+=1
+    return (nouveau_li,nouveau_co)
+
+def direction_possible_2(l_arene,x,y):
+    mat=arene["matrice"]
+    nb_lig=matrice.get_nb_lignes(mat)
+    nb_col=matrice.get_nb_colonnes(mat)
+    res=str()
+    for dir in 'NSEO':
+        if dir =='N':
+            if not 
+            if not arene.est_mur(l_arene,x-1,y)
+    
+def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
     """Retourne un dictionnaire indiquant pour chaque direction possibles, 
         les objets ou boites pouvant être mangés par le serpent du joueur et
         se trouvant dans voisinage de la tête du serpent 
@@ -51,11 +85,18 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):
             (distance,val_objet,prop) où distance indique le nombre de cases jusqu'à l'objet et id_objet
             val_obj indique la valeur de l'objet ou de la boite et prop indique le propriétaire de la boite
     """
+    x,y=arene.get_serpent(l_arene,num_joueur)[0]   #position de la tete
     res_dict=dict()
-    direction=directions_possibles(l_arene,num_joueur)
-    for dir in direction:
-        delta_lig,delta_col=arene.DIRECTIONS[dir]
+    chemin_liste=[[]]
+    for _ in range(dist_max):
         
+        nouvelle_liste=[]
+        for chemin in chemin_liste:
+            direction=directions_possibles(l_arene,num_joueur)   ##appel de fonction pas encore pret
+            for dir in direction:
+                #delta_lig,delta_col=arene.DIRECTIONS[dir]
+                nouvelle_liste.append([chemin]+[dir])
+        chemin_liste+=nouvelle_liste
 
 
 def mon_IA2(num_joueur:int, la_partie:dict)->str:

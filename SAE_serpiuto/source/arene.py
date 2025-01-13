@@ -50,7 +50,7 @@ def Arene(nb_lig:int,nb_col:int,noms_participants:list[str])->dict:
     for nom in noms_participants:
         serpents.append(serpent.Serpent(nom,coul))
         coul+=1
-
+        
     mat= matrice.Matrice(nb_lig,nb_col)
     return {"matrice":mat,"nb_joueurs":len(serpents),"serpents":serpents}
 
