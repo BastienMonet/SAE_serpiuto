@@ -114,6 +114,17 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
             for dir in direction:
                 nouvelle_liste.append([chemin]+[dir])
         chemin_liste+=nouvelle_liste
+    #print(chemin_liste)
+    #on vien de cree une liste de chemin, avec tout les chemins possible de longueur 'dist_max'
+    for chemin_car in chemin_liste[1:]:
+        x_final,y_final=deplacement(chemin_car,x,y)
+        if arene.est_bonus(l_arene,x_final,y_final):
+            res_dict[chemin]=(len(chemin),0,0)
+        else:
+            val_boite=arene.get_val_boite(l_arene,x_final,y_final)
+            if val_boite>0:
+                res_dict[chemin]=(len(chemin),val_boite,arene.get_proprietaire(l_arene,x_final,y_final))
+    return res_dict
 
 
 def mon_IA2(num_joueur:int, la_partie:dict)->str:
