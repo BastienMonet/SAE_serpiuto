@@ -13,6 +13,7 @@ import client
 import random
 import arene
 import serpent
+import matrice
 direction_prec='X' # variable indiquant la décision précédente prise par le joueur. A mettre à jour soi-même
 
 ####################################################################
@@ -68,8 +69,22 @@ def direction_possible_2(l_arene,x,y):
     res=str()
     for dir in 'NSEO':
         if dir =='N':
-            if not 
-            if not arene.est_mur(l_arene,x-1,y)
+            if not x-1<0:
+                if not arene.est_mur(l_arene,x-1,y):
+                    res+=dir
+        if dir =='S':
+            if x+1<nb_lig:
+                if not arene.est_mur(l_arene,x+1,y):
+                    res+=dir
+        if dir =='O':
+            if not y-1<0:
+                if not arene.est_mur(l_arene,x,y-1):
+                    res+=dir
+        if dir =='E':
+            if x+1<nb_col:
+                if not arene.est_mur(l_arene,x,y+1):
+                    res+=dir
+    return res
     
 def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
     """Retourne un dictionnaire indiquant pour chaque direction possibles, 
