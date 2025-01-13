@@ -129,8 +129,8 @@ def set_liste_pos(serpent:dict, tete:list):
     Args:
         serpent (dict): le serpent considéré
         tete (list): la liste des positions occupées par ce serpent
-    """    
-    ...
+    """
+    serpent['positions']=tete
 
 def set_derniere_direction(serpent:dict, direction:str):
     """Met à jout la dernière direction utilisée par le serpent (utile pour l'affichage)
@@ -138,9 +138,9 @@ def set_derniere_direction(serpent:dict, direction:str):
     Args:
         serpent (dict): le serpent considéré
         direction (str): un des caractère N S E O
-    """    
-    ...
-
+    """
+    serpent['direction']=direction
+    
 def to_str(serpent:dict)->str:
     """produit une chaine de caractères contenant les informations principales d'un serpent sour la forme
     Joueur 1 -> 143 s:0 m:4 p:0
