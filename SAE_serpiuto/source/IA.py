@@ -104,12 +104,14 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
     res_dict=dict()
     chemin_liste=[[]]
     for _ in range(dist_max):
-        
         nouvelle_liste=[]
         for chemin in chemin_liste:
-            direction=directions_possibles(l_arene,num_joueur)   ##appel de fonction pas encore pret
+            nouveau_x,nouveau_y=deplacement(chemin,x,y)
+            if len(chemin_liste)==1:
+                direction=directions_possibles(l_arene,num_joueur)   ##appel de fonction pas encore pret
+            if len(chemin_liste)>1:
+                direction=direction_possible_2(l_arene,nouveau_x,nouveau_y)
             for dir in direction:
-                #delta_lig,delta_col=arene.DIRECTIONS[dir]
                 nouvelle_liste.append([chemin]+[dir])
         chemin_liste+=nouvelle_liste
 
