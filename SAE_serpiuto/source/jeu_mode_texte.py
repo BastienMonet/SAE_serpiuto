@@ -14,6 +14,7 @@ import random
 import arene
 import partie
 import IA
+import os
 
 # Si vous souhaitez tester plusieurs IA, vous pouvez changer le
 # le nom de la fonction d'IA utilisée pour chaque joueur (par défaut IA.mon_IA)
@@ -25,7 +26,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--nom_partie", dest="nom_partie", help="nom de la partie", type=str, default='score.csv')
     parser.add_argument("--duree", dest="duree", help="nombre de tours de la partie", type=int, default=150)
-    parser.add_argument("--map", dest="map", help="fichier contenant la map", type=str, default='../plan/plan1.txt')
+    parser.add_argument("--map", dest="map", help="fichier contenant la map", type=str, default='SAE_serpiuto/plan/plan1.txt')
     parser.add_argument("--nb_joueurs", dest="nb_joueurs", help="indique le nombre de joueurs de la partie", type=int, default=4)
     parser.add_argument("--tempo", dest="tempo",help="indique le temps en secondes de temporisation entre chaque affichage", type=float, default=0.5)
     parser.add_argument("--debug", help="permet de faire dérouler la partie pas à pas", action='store_true')
