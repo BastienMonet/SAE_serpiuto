@@ -298,7 +298,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     Returns:
         str: une des lettres 'N', 'S', 'E' ou 'O' indiquant la direction que prend la tête du serpent du joueur
     """
-    print(objets_voisinage(la_partie["arene"], num_joueur, 3))    
+    print(objets_voisinage(la_partie["arene"], num_joueur, 8))    
     direction=random.choice("NSEO")
     direction_prec=direction #La décision prise sera la direction précédente le prochain tour
     dir_pos=arene.directions_possibles(partie.get_arene(la_partie),num_joueur)
@@ -309,6 +309,15 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     return direction
 
 def mon_IA3(num_joueur:int, la_partie:dict)->str: 
+    """cette fonction renvoie la direction a prendre, en fonction de la position du joueur et de l'invironement
+
+    Args:
+        num_joueur (int): _description_
+        la_partie (dict): _description_
+
+    Returns:
+        str: _description_
+    """
     res=''
     val_tete=0
 
