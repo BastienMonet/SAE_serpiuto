@@ -29,6 +29,7 @@ class Client():
     def afficher_msg(self, msg, complement=""):
         print("["+str(self.id_client)+"] =>", msg, complement)
 
+
     def reception(self,timeout=-1):
         # on vérifie que la réserve ne contient pas déjà le message
         ind_0 = self.reserve.find(self.fin_de_message)

@@ -232,9 +232,9 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
     res={}
     liste_pos, calque = pos_a_distance(l_arene, num_joueur, dist_max)
     for position in liste_pos:
-        print(position)
         chemin = fabrique_chemin(calque, position)
         cardinal = chemin_to_cardinal(chemin)
+        print(cardinal)
         res[cardinal] = (matrice.get_val(calque, position[0], position[1]), arene.get_val_boite(l_arene, position[0], position[1]), arene.get_proprietaire(l_arene, position[0], position[1]))
     return res
 
@@ -251,7 +251,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     Returns:
         str: une des lettres 'N', 'S', 'E' ou 'O' indiquant la direction que prend la tête du serpent du joueur
     """
-    print(objets_voisinage(la_partie["arene"], num_joueur, 5))
+    print(objets_voisinage(la_partie["arene"], num_joueur, 3))
     
     direction=random.choice("NSEO")
     direction_prec=direction #La décision prise sera la direction précédente le prochain tour
