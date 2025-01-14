@@ -149,10 +149,11 @@ def pos_a_distance(l_arene:dict, num_joueur, dist_max:int)->[tuple]:
     Args:
         l_arene (dict): l'arène de la partie
         num_joueur (int): le joueur dont on souhaite évaluer la position
-        dist_max (int): _description_
+        dist_max (int): la distance max a respecter
 
     Returns:
-        [tuple]: retourne une liste de tuple contenant toutes les positions présentant un objet ou une presence d'un joueur
+        tuple (liste_position, calque): retourne une liste de tuple contenant toutes les positions 
+        présentant un objet ou une presence d'un joueur avec le calque effectif
     """
     liste_positions = []
     pos_init_x, pos_init_y=arene.get_serpent(l_arene,num_joueur)[0]
@@ -161,20 +162,27 @@ def pos_a_distance(l_arene:dict, num_joueur, dist_max:int)->[tuple]:
     calque = calque_a_mur(l_arene)
     matrice.set_val(calque, pos_init_x, pos_init_y, 0)
     compteur = 0
+
+    voisin_act = [(pos_init_x, pos_init_y)]
+    voisin_suiv = []
     
     while compteur < dist_max:
-        for x in range(nb_ligne):
-            for y in range(nb_colonne):
-                if matrice.get_val(calque, x, y) == compteur:
-                    voisins = getvoisins(calque, x ,y)
-                    for (voisin_x, voisin_y) in voisins:
-                        if matrice.get_val(calque, voisin_x, voisin_y) is None:
-                            matrice.set_val(calque, voisin_x, voisin_y, compteur+1)
-                            if arene.get_val_boite(l_arene, voisin_x, voisin_y) != 0 or arene.get_proprietaire(l_arene, voisin_x, voisin_y) != 0:
-                                liste_positions.append((voisin_x, voisin_y))
+        # for x in range(nb_ligne):
+        #     for y in range(nb_colonne):
+        for x, y in voisin_act:
+            if matrice.get_val(calque, x, y) == compteur:
+                voisins = getvoisins(calque, x ,y)
+                for (voisin_x, voisin_y) in voisins:
+                    if matrice.get_val(calque, voisin_x, voisin_y) is None:
+                        voisin_suiv.append((voisin_x, voisin_y))
+                        matrice.set_val(calque, voisin_x, voisin_y, compteur+1)
+                        if arene.get_val_boite(l_arene, voisin_x, voisin_y) != 0 or arene.get_proprietaire(l_arene, voisin_x, voisin_y) != 0:
+                            liste_positions.append((voisin_x, voisin_y))
                                 
         compteur += 1
-    # matrice.affiche(calque)
+        voisin_act = voisin_suiv
+    matrice.affiche(calque)
+    # print(liste_positions)
     return liste_positions, calque
 
 def fabrique_chemin(calque, position_arr):
@@ -201,6 +209,14 @@ def fabrique_chemin(calque, position_arr):
 
 
 def chemin_to_cardinal(chemin):
+    """transforme une suite de position en suite de Nord Sud Est Ouest
+
+    Args:
+        chemin (list(tuple)): une liste de position
+
+    Returns:
+        str: retourne une suite d'instruction NSEO a réaliser pour réaliser le chemin
+    """
     res = ""
     for i in range(len(chemin)-1):
         x, y = chemin[i]
@@ -232,7 +248,6 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
     res={}
     liste_pos, calque = pos_a_distance(l_arene, num_joueur, dist_max)
     for position in liste_pos:
-        print(position)
         chemin = fabrique_chemin(calque, position)
         cardinal = chemin_to_cardinal(chemin)
         res[cardinal] = (matrice.get_val(calque, position[0], position[1]), arene.get_val_boite(l_arene, position[0], position[1]), arene.get_proprietaire(l_arene, position[0], position[1]))
@@ -251,7 +266,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     Returns:
         str: une des lettres 'N', 'S', 'E' ou 'O' indiquant la direction que prend la tête du serpent du joueur
     """
-    print(objets_voisinage(la_partie["arene"], num_joueur, 5))
+    print(objets_voisinage(la_partie["arene"], num_joueur, 3))
     
     direction=random.choice("NSEO")
     direction_prec=direction #La décision prise sera la direction précédente le prochain tour
