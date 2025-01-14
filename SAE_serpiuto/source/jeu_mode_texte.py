@@ -18,7 +18,7 @@ import os
 
 # Si vous souhaitez tester plusieurs IA, vous pouvez changer le
 # le nom de la fonction d'IA utilisée pour chaque joueur (par défaut IA.mon_IA)
-les_IA={1:IA.mon_IA,2:IA.mon_IA,3:IA.mon_IA,4:IA.mon_IA}
+les_IA={1:IA.mon_IA_du_futur,2:IA.mon_IA,3:IA.mon_IA,4:IA.mon_IA}
 
 if __name__ == '__main__': 
     print("Bienvenue dans le jeu du SerpIUT'O")

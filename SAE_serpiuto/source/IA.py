@@ -254,6 +254,13 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
     return res
 
 
+
+def mon_IA_du_futur(num_joueur:int, la_partie:dict):
+    obj_voisinage = objets_voisinage(la_partie["arene"], num_joueur, 20)
+    voisin_pres = min(obj_voisinage, key= lambda cle: obj_voisinage[cle][0])
+    print(voisin_pres)
+    return voisin_pres[0]
+
 def mon_IA2(num_joueur:int, la_partie:dict)->str:
     return 'N'
 def mon_IA(num_joueur:int, la_partie:dict)->str:
