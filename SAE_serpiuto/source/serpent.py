@@ -104,11 +104,11 @@ def get_bonus(serpent:dict)->list:
         list: la liste des bonus du joueur
     """    
     liste_bonus=list()
-    if serpent['tps_s'] < 0:
+    if serpent['tps_s'] > 0:
         liste_bonus.append('surpuissance')
-    if serpent['tps_p'] < 0 :
+    if serpent['tps_p'] > 0 :
         liste_bonus.append('protection')
-    if serpent['tps_m'] < 0:
+    if serpent['tps_m'] > 0:
         liste_bonus.append('mange-mur')
     return liste_bonus
 
