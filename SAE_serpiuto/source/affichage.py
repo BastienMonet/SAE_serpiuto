@@ -15,7 +15,7 @@ import threading
 import client
 import partie
 import arene
-import SAE_serpiuto.source.mon_serpent as mon_serpent
+import SAE_serpiuto.source.serpent as serpent
 
 
 ECHELLE=1
@@ -210,13 +210,13 @@ class JeuGraphique(object):
 
         classement = arene.classement(self.arene)
         for le_serpent in classement:
-            nom = mon_serpent.get_nom(le_serpent)
-            points = mon_serpent.get_points(le_serpent)
+            nom = serpent.get_nom(le_serpent)
+            points = serpent.get_points(le_serpent)
             contenu = "{} {}"
-            surfp = self.surf_mini_snakes[mon_serpent.get_num_joueur(le_serpent)]
+            surfp = self.surf_mini_snakes[serpent.get_num_joueur(le_serpent)]
             self.surface.blit(surfp, (posx, posy ))
             nb_obj=-1
-            for un_obj in mon_serpent.get_bonus(le_serpent):
+            for un_obj in serpent.get_bonus(le_serpent):
                self.surface.blit(self.surf_objets[un_obj],(posx-self.delta//2,posy+(nb_obj*self.delta//2)))
                nb_obj+=1
             texte = self.font.render(

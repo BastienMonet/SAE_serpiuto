@@ -12,7 +12,7 @@ import argparse
 import client
 import random
 import arene
-import SAE_serpiuto.source.mon_serpent as mon_serpent
+import SAE_serpiuto.source.serpent as serpent
 import matrice
 direction_prec='X' # variable indiquant la décision précédente prise par le joueur. A mettre à jour soi-même
 
@@ -315,7 +315,7 @@ def is_protection(num_joueur,la_partie):
         num_joueur (_type_): _description_
         la_partie (_type_): _description_
     """
-    return mon_serpent.
+    return serpent.get_temps_protection(arene.get_serpent(la_partie["arene"],num_joueur))>0
 
 def mon_IA3(num_joueur:int, la_partie:dict)->str: 
     """cette fonction renvoie la direction a prendre, en fonction de la position du joueur et de l'invironement

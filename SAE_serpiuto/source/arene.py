@@ -6,7 +6,7 @@
     Module arene.py
     Ce module implémente l'API permettant de gérer l'arène du jeu
 """
-import SAE_serpiuto.source.mon_serpent as mon_serpent
+import SAE_serpiuto.source.serpent as serpent
 import matrice
 import case
 import random
@@ -48,7 +48,7 @@ def Arene(nb_lig:int,nb_col:int,noms_participants:list[str])->dict:
     serpents=[]
     coul=1
     for nom in noms_participants:
-        serpents.append(mon_serpent.Serpent(nom,coul))
+        serpents.append(serpent.Serpent(nom,coul))
         coul+=1
         
     mat= matrice.Matrice(nb_lig,nb_col)
@@ -200,7 +200,7 @@ def get_serpent(arene:dict,num_joueur:int)->list:
     Returns:
         list: la liste des positions occupées par le serpent du joueur
     """    
-    return mon_serpent.get_liste_pos(arene["serpents"][num_joueur-1])
+    return serpent.get_liste_pos(arene["serpents"][num_joueur-1])
 
 def get_derniere_direction(arene:dict,num_joueur:int)->str:
     """Retourne l'orientation relative des deux dernières boites du serpent du joueur passé en paramètre
@@ -212,7 +212,7 @@ def get_derniere_direction(arene:dict,num_joueur:int)->str:
     Returns:
         str: une des lettres N O S E indiquant orientation relative des deux dernières boites
     """   
-    return mon_serpent.get_derniere_direction(arene["serpents"][num_joueur-1])
+    return serpent.get_derniere_direction(arene["serpents"][num_joueur-1])
                             
 def classement(arene:dict)->list:
     """
@@ -224,7 +224,7 @@ def classement(arene:dict)->list:
     Returns:
         list: la liste classées des serpents des joueurs présents sur l'arène
     """    
-    return sorted(arene["serpents"],key=lambda s:-mon_serpent.get_points(s))
+    return sorted(arene["serpents"],key=lambda s:-serpent.get_points(s))
 
 def ajouter_joueur(arene:dict,nom_joueur:str)->int:
     """ajoute un nouveau joueur sur l'arène
@@ -237,7 +237,7 @@ def ajouter_joueur(arene:dict,nom_joueur:str)->int:
         int: l'identifiant du joueur qui vient d'être ajouté
     """    
     nb_j=arene["nb_joueurs"]+1
-    arene["serpents"].append(mon_serpent.Serpent(nom_joueur,nb_j))
+    arene["serpents"].append(serpent.Serpent(nom_joueur,nb_j))
     lig,col=choisir_case_vide(arene)
     init_joueur(arene,nb_j,lig,col)
     arene["nb_joueurs"]=nb_j
@@ -261,7 +261,7 @@ def init_joueur(arene:dict,num_joueur:int,lig:int,col:int)->bool:
     if case.est_mur(la_case) or case.contient_boite(la_case):
         return False
     case.set_boite(la_case,1,num_joueur,TEMPS_FUSION)
-    mon_serpent.set_liste_pos(arene["serpents"][num_joueur-1],[(lig,col)])
+    serpent.set_liste_pos(arene["serpents"][num_joueur-1],[(lig,col)])
     return True
 
 def choisir_case_vide(arene:dict)->tuple[int,int]:
@@ -339,7 +339,7 @@ def mise_a_jour_temps(arene:dict)->None:
         for col in range(matrice.get_nb_colonnes(mat)):
             case.mise_jour_temps_restant(matrice.get_val(mat,lig,col))
     for serp in arene["serpents"]:
-        mon_serpent.maj_temps(serp)
+        serpent.maj_temps(serp)
 
 
 def decaler_queue(arene:dict,serpent:list,i_debut:int)->None:
@@ -487,7 +487,7 @@ def remonter_boite(arene:dict,serpent:list,i_debut:int)->int:
 
 def get_val_tete(arene,proprietaire):
     mat=arene["matrice"]
-    serp=mon_serpent.get_liste_pos(arene["serpents"][proprietaire-1])
+    serp=serpent.get_liste_pos(arene["serpents"][proprietaire-1])
     val_prec,_=case.get_val_temps(matrice.get_val(mat,serp[0][0],serp[0][1]))
     return val_prec
 
@@ -502,7 +502,7 @@ def fusionner_boites(arene:dict,proprietaire:int)->int:
         int: valeur des boites fusionnées
     """
     mat=arene["matrice"]
-    serp=mon_serpent.get_liste_pos(arene["serpents"][proprietaire-1])
+    serp=serpent.get_liste_pos(arene["serpents"][proprietaire-1])
     val_prec,tr_prec=case.get_val_temps(matrice.get_val(mat,serp[0][0],serp[0][1]))
     val_tete=val_prec
     for i in range(1,len(serp)):
@@ -528,7 +528,7 @@ def supprimer_queue(arene:dict,num_joueur:int, lig:int,col:int)->int:
     Returns:
         int: somme des valeurs des boites supprimées
     """    
-    serp=mon_serpent.get_liste_pos(arene["serpents"][num_joueur-1])
+    serp=serpent.get_liste_pos(arene["serpents"][num_joueur-1])
     i=0
     mat=arene["matrice"]
 
@@ -555,8 +555,8 @@ def deplacer_serpent(arene:dict,num_joueur:int,lig_arr:int,col_arr:int,valeur:in
         valeur (int): valeur de la boîte à ajouter au serpent (0 si rien à ajouter)
     """
     mat=arene["matrice"]
-    mon_serpent.set_derniere_direction(arene["serpents"][num_joueur-1],direction)
-    serp:list=mon_serpent.get_liste_pos(arene["serpents"][num_joueur-1])
+    serpent.set_derniere_direction(arene["serpents"][num_joueur-1],direction)
+    serp:list=serpent.get_liste_pos(arene["serpents"][num_joueur-1])
     serp.insert(0,(lig_arr,col_arr))
     i=1
     lig_prec,col_prec=lig_arr,col_arr
@@ -581,7 +581,7 @@ def directions_possibles(arene:dict,num_joueur:int)->str:
     mat=arene["matrice"]
     nb_lig=matrice.get_nb_lignes(mat)
     nb_col=matrice.get_nb_colonnes(mat)
-    lig_dep,col_dep=mon_serpent.get_liste_pos(arene["serpents"][num_joueur-1])[0]
+    lig_dep,col_dep=serpent.get_liste_pos(arene["serpents"][num_joueur-1])[0]
     for dir in 'NOSE':
         delta_lig,delta_col=DIRECTIONS[dir]
         lig_arr=lig_dep+delta_lig
@@ -596,28 +596,28 @@ def directions_possibles(arene:dict,num_joueur:int)->str:
     return res
 
 def arrivee_dans_un_mur(arene:dict,joueur:dict,num_joueur:int,lig_arr:int,col_arr:int,direction:str)->str:
-    mon_serpent.ajouter_points(joueur,MALUS)
-    if mon_serpent.get_temps_mange_mur(joueur)>0:
+    serpent.ajouter_points(joueur,MALUS)
+    if serpent.get_temps_mange_mur(joueur)>0:
         deplacer_serpent(arene,num_joueur,lig_arr,col_arr,0,direction)
         return "Le joueur "+str(num_joueur)+" a mangé un mur"
-    mult_div_serpent(arene,mon_serpent.get_liste_pos(joueur),num_joueur,"/")
+    mult_div_serpent(arene,serpent.get_liste_pos(joueur),num_joueur,"/")
     return "Le joueur "+str(num_joueur)+" s'est cogné dans un mur"
 
 def arrivee_dans_une_boite_sup(arene:dict,joueur:dict,num_joueur:int,lig_arr:int,col_arr:int,case_arr:dict,direction:str)->str:
-    mon_serpent.ajouter_points(joueur,MALUS)
-    if mon_serpent.get_temps_surpuissance(joueur)<=0:
-        mult_div_serpent(arene,mon_serpent.get_liste_pos(joueur),num_joueur,"/")
+    serpent.ajouter_points(joueur,MALUS)
+    if serpent.get_temps_surpuissance(joueur)<=0:
+        mult_div_serpent(arene,serpent.get_liste_pos(joueur),num_joueur,"/")
         return "Le joueur "+str(num_joueur)+" s'est cogné dans une boite trop grosse pour lui"
     valeur,prop,tps=case.enlever_boite(case_arr)
     res="Le joueur "+str(num_joueur)+" a mangé une boite de "+str(valeur)+" grâce à sa surpuissance"
     if prop>0:
-        if mon_serpent.get_temps_protection(arene["serpents"][prop-1])>=0:
-            mult_div_serpent(arene,mon_serpent.get_liste_pos(joueur),num_joueur,"/")
+        if serpent.get_temps_protection(arene["serpents"][prop-1])>=0:
+            mult_div_serpent(arene,serpent.get_liste_pos(joueur),num_joueur,"/")
             case.set_boite(case_arr,valeur,prop,tps)
             return "Le joueur "+str(num_joueur)+" a mordu un autre joueur qui bénéficie d'une protection"
         nb_points=supprimer_queue(arene,prop,lig_arr,col_arr)+valeur
-        mon_serpent.ajouter_points(arene["serpents"][prop-1],-nb_points)
-        mon_serpent.ajouter_points(joueur,nb_points)
+        serpent.ajouter_points(arene["serpents"][prop-1],-nb_points)
+        serpent.ajouter_points(joueur,nb_points)
         res="Le joueur "+str(num_joueur)+" a mordu un autre joueur grace à sa surpuissance ce qui lui a rapporté "+nb_points+" points"
     deplacer_serpent(arene,num_joueur,lig_arr,col_arr,valeur,direction)
     return res
@@ -638,10 +638,10 @@ def deplacer_joueur(arene:dict,num_joueur:int,direction:str)->str:
     mat=arene["matrice"]
     
     joueur=arene["serpents"][num_joueur-1]
-    lig_dep,col_dep=mon_serpent.get_liste_pos(joueur)[0]
+    lig_dep,col_dep=serpent.get_liste_pos(joueur)[0]
     if direction not in DIRECTIONS:
-        mult_div_serpent(arene,mon_serpent.get_liste_pos(joueur),num_joueur,"/")
-        mon_serpent.ajouter_points(joueur,MALUS)
+        mult_div_serpent(arene,serpent.get_liste_pos(joueur),num_joueur,"/")
+        serpent.ajouter_points(joueur,MALUS)
         return "Le joueur "+str(num_joueur)+" a joué une direction incorrecte"
     
     nb_lig,nb_col=get_dim(arene)
@@ -649,8 +649,8 @@ def deplacer_joueur(arene:dict,num_joueur:int,direction:str)->str:
     lig_arr=lig_dep+delta_lig
     col_arr=col_dep+delta_col
     if lig_arr<0 or lig_arr>=nb_lig or col_arr<0 or col_arr>=nb_col:
-        mult_div_serpent(arene,mon_serpent.get_liste_pos(joueur),num_joueur,"/")
-        mon_serpent.ajouter_points(joueur,MALUS)
+        mult_div_serpent(arene,serpent.get_liste_pos(joueur),num_joueur,"/")
+        serpent.ajouter_points(joueur,MALUS)
         return "Le joueur "+str(num_joueur)+" est sorti de l'arène"
     
     case_arr=matrice.get_val(mat,lig_arr,col_arr)
@@ -663,41 +663,41 @@ def deplacer_joueur(arene:dict,num_joueur:int,direction:str)->str:
     
     # le joueur arrive sur une case a priori possible
     valeur,prop,tps=case.enlever_boite(case_arr)
-    mon_serpent.ajouter_points(joueur,valeur)    
+    serpent.ajouter_points(joueur,valeur)    
     if prop>0:
-        if mon_serpent.get_temps_protection(arene["serpents"][prop-1])>0:
+        if serpent.get_temps_protection(arene["serpents"][prop-1])>0:
             # finalement le joueur visé est protégé => perte de points
-            mon_serpent.ajouter_points(joueur,-valeur) 
-            mult_div_serpent(arene,mon_serpent.get_liste_pos(joueur),num_joueur,"/")
+            serpent.ajouter_points(joueur,-valeur) 
+            mult_div_serpent(arene,serpent.get_liste_pos(joueur),num_joueur,"/")
             case.set_boite(case_arr,valeur,prop,tps)
             return "Le joueur "+str(num_joueur)+" a mordu le joueur "+str(prop)+ " qui bénéficie d'une protection "
         nb_points=supprimer_queue(arene,prop,lig_arr,col_arr)
-        mon_serpent.ajouter_points(arene["serpents"][prop-1],-nb_points-valeur)
-        mon_serpent.ajouter_points(joueur,nb_points)
+        serpent.ajouter_points(arene["serpents"][prop-1],-nb_points-valeur)
+        serpent.ajouter_points(joueur,nb_points)
         deplacer_serpent(arene,num_joueur,lig_arr,col_arr,valeur,direction)
         res="Le joueur "+str(num_joueur)+" a mordu le joueur "+str(prop)+ " echange de "+str(nb_points+valeur)+" points"
     elif valeur==PROTECTION:
         deplacer_serpent(arene,num_joueur,lig_arr,col_arr,0,direction)
-        mon_serpent.ajouter_temps_protection(joueur,TEMPS_BONUS)
+        serpent.ajouter_temps_protection(joueur,TEMPS_BONUS)
         res="Le joueur "+str(num_joueur)+" a gagné le bonus de protection"
     elif valeur==MULTIPLIE:
-        ligq,colq=mon_serpent.get_queue(joueur)
+        ligq,colq=serpent.get_queue(joueur)
         val_queue=2*case.get_val_boite(matrice.get_val(mat,ligq,colq))
         deplacer_serpent(arene,num_joueur,lig_arr,col_arr,val_queue,direction)
-        enlever_queue(arene,mon_serpent.get_liste_pos(joueur),num_joueur)
+        enlever_queue(arene,serpent.get_liste_pos(joueur),num_joueur)
         res="Le joueur "+str(num_joueur)+" a gagné le bonus de multiplication qui multiplie sa queue par deux "+str(val_queue)
     elif valeur==AJOUTE:
-        ligq,colq=mon_serpent.get_queue(joueur)
+        ligq,colq=serpent.get_queue(joueur)
         val_queue=case.get_val_boite(matrice.get_val(mat,ligq,colq))
         deplacer_serpent(arene,num_joueur,lig_arr,col_arr,val_queue,direction)
         res="Le joueur "+str(num_joueur)+" a gagné le bonus d'addition qui lui ajoute une boite de "+str(val_queue)
     elif valeur==SURPUISSANCE:
         deplacer_serpent(arene,num_joueur,lig_arr,col_arr,0,direction)
-        mon_serpent.ajouter_temps_surpuissance(joueur,TEMPS_BONUS)
+        serpent.ajouter_temps_surpuissance(joueur,TEMPS_BONUS)
         res="Le joueur "+str(num_joueur)+" a gagné le bonus de surpuissance"
     elif valeur==MANGE_MUR:
         deplacer_serpent(arene,num_joueur,lig_arr,col_arr,0,direction)
-        mon_serpent.ajouter_temps_mange_mur(joueur,TEMPS_BONUS)
+        serpent.ajouter_temps_mange_mur(joueur,TEMPS_BONUS)
         res="Le joueur "+str(num_joueur)+" a gagné le bonus qui permet de manger des murs"
     else:
         deplacer_serpent(arene,num_joueur,lig_arr,col_arr,valeur,direction)
@@ -735,7 +735,7 @@ def afficher_arene(arene:dict):
                 ansiColor.pcouleur(valeur,case.get_proprietaire(la_case),fond,ansiColor.GRAS)
         print()
     for num_j in range(arene["nb_joueurs"]):
-        ansiColor.pcouleur(mon_serpent.to_str(arene["serpents"][num_j])+'\n',num_j+1)
+        ansiColor.pcouleur(serpent.to_str(arene["serpents"][num_j])+'\n',num_j+1)
 
 def afficher_serpent(arene:dict,num_joueur:int):
     """affiche un serpent en mode texte
@@ -745,7 +745,7 @@ def afficher_serpent(arene:dict,num_joueur:int):
         num_joueur (int): numéro du joueur dont on veut affiche le serpent
     """    
     mat=arene["matrice"]
-    for lin,col in mon_serpent.get_liste_pos(arene["serpents"][num_joueur-1]):
+    for lin,col in serpent.get_liste_pos(arene["serpents"][num_joueur-1]):
         la_case=matrice.get_val(mat,lin,col)
         print("[",case.get_val_boite(la_case),",",case.get_temps_restant(la_case),"]",sep="",end="<-")
 
@@ -756,7 +756,7 @@ def fusionner_boites_ex(arene:dict):
         arene (dict): l'arène considérée
     """    
     for j in range(1,arene["nb_joueurs"]+1):
-        mon_serpent.ajouter_points(arene["serpents"][j-1],fusionner_boites(arene,j))
+        serpent.ajouter_points(arene["serpents"][j-1],fusionner_boites(arene,j))
         
 def jouer_un_tour(arene):
     """effectue un tour de jeu où tous les joueurs jouent de manière aléatoire (pour tester)
@@ -772,7 +772,7 @@ def jouer_un_tour(arene):
                 dir=random.choice(dir_pos)
             deplacer_joueur(arene,j,dir)
     for j in range(1,arene["nb_joueurs"]+1):
-        mon_serpent.ajouter_points(arene["serpents"][j-1],fusionner_boites(arene,j))
+        serpent.ajouter_points(arene["serpents"][j-1],fusionner_boites(arene,j))
     mise_a_jour_temps(arene)
     ajouter_des_boites_ou_bonus(arene,1,2,4)
     ajouter_des_boites_ou_bonus(arene,-5,-1,2)
@@ -803,7 +803,7 @@ def arene_2_str(arene:dict,sep=";")->str:
             prec=sep
         res+='\n'
     for num_j in range(arene["nb_joueurs"]):
-        res+=mon_serpent.serpent_2_str(arene["serpents"][num_j],sep)
+        res+=serpent.serpent_2_str(arene["serpents"][num_j],sep)
     return res
 
 def arene_from_str(chaine:str,sep=';')->dict:
@@ -837,7 +837,7 @@ def arene_from_str(chaine:str,sep=';')->dict:
     les_serpents=[]
     for ind in range(nb_lig+1,len(contenu)-1):
         if ind%2==0:
-            serp=mon_serpent.serpent_from_str("\n".join(contenu[ind:ind+2]),sep)
+            serp=serpent.serpent_from_str("\n".join(contenu[ind:ind+2]),sep)
             les_serpents.append(serp)
     return {"matrice":mat,"nb_joueurs":len(les_serpents),"serpents":les_serpents}
 
@@ -850,8 +850,8 @@ def sauver_score(arene:dict,nom_fic:str):
     """    
     with open(nom_fic, "w") as fic:
         for serp in arene["serpents"]:
-            fic.write(mon_serpent.get_nom(serp).replace("~", ".").replace(";", ",") + ";" + \
-                            str(mon_serpent.get_points(serp)) + "\n")
+            fic.write(serpent.get_nom(serp).replace("~", ".").replace(";", ",") + ";" + \
+                            str(serpent.get_points(serp)) + "\n")
 
 def copy_arene(arene:dict)->dict:
     """recopie une arene. Attention à ce que la matrice et les listes
