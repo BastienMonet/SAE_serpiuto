@@ -485,6 +485,11 @@ def remonter_boite(arene:dict,serpent:list,i_debut:int)->int:
             i-=1
     return i
 
+def get_val_tete(arene,proprietaire):
+    mat=arene["matrice"]
+    serp=serpent.get_liste_pos(arene["serpents"][proprietaire-1])
+    val_prec,_=case.get_val_temps(matrice.get_val(mat,serp[0][0],serp[0][1]))
+    return val_prec
 
 def fusionner_boites(arene:dict,proprietaire:int)->int:
     """Cherche à fusionner les deux boites consécutives de même valeur d'un serpent les plus proches de la tête.
