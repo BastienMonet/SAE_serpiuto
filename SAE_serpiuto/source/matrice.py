@@ -37,7 +37,10 @@ def get_val(mat:dict,lig:int,col:int) -> Any:
     Returns:
         Any: la valeur de la case recherchée
     """    
-    return mat["valeurs"][(lig,col)]
+    if (lig, col) in mat["valeurs"]:
+        return mat["valeurs"][(lig, col)]
+    else:
+        raise KeyError(f"Coordonnées invalides : ({lig}, {col})")
 
 def set_val(mat:dict,lig:int,col:int,val:Any) -> None:
     """Stocke la valeur val dans la case de la matrice qui se trouve en lig,col
