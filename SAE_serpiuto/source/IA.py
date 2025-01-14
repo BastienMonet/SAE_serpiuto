@@ -315,7 +315,7 @@ def is_protection(num_joueur,la_partie):
         num_joueur (_type_): _description_
         la_partie (_type_): _description_
     """
-    return 
+    return mon_serpent.
 
 def mon_IA3(num_joueur:int, la_partie:dict)->str: 
     """cette fonction renvoie la direction a prendre, en fonction de la position du joueur et de l'invironement
