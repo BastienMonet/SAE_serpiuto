@@ -250,9 +250,9 @@ def chemin_to_cardinal(chemin):
     for i in range(len(chemin)-1):
         x, y = chemin[i]
         if chemin[i+1] == (x+1, y):
-            res+= "N"
-        elif chemin[i+1] == (x-1, y):
             res+= "S"
+        elif chemin[i+1] == (x-1, y):
+            res+= "N"
         elif chemin[i+1] == (x, y+1):
             res+= "E"
         elif chemin[i+1] == (x, y-1):
