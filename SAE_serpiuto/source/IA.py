@@ -12,6 +12,7 @@ import argparse
 import client
 import random
 import arene
+import case
 import SAE_serpiuto.source.serpent as serpent
 import matrice
 direction_prec='X' # variable indiquant la décision précédente prise par le joueur. A mettre à jour soi-même
@@ -317,6 +318,21 @@ def is_protection(num_joueur,la_partie):
     """
     return serpent.get_temps_protection(arene.get_serpent(la_partie["arene"],num_joueur))>0
 
+def mini_chemin_boite(liste,val_tete):
+    """renvoi le plus petit chemin pour aller vers une boite , en fontion de la valeur de la tete
+    le dico est trié par rapport au clé, donc du chemin le plus rapide au plus long
+    Args:
+        liste (_type_): _description_
+    """
+    if val_tete>1:
+        cible=2
+    else:
+        cible=1
+    for chemin,spec in liste.items():
+        _,val,propri=spec
+        if val==cible and propri==0:
+            return chemin
+
 def mon_IA3(num_joueur:int, la_partie:dict)->str: 
     """cette fonction renvoie la direction a prendre, en fonction de la position du joueur et de l'invironement
 
@@ -328,11 +344,24 @@ def mon_IA3(num_joueur:int, la_partie:dict)->str:
         str: _description_
     """
     res=''
-    val_tete=0
+    val_tete=0      #pas encore codé
+    arene=la_partie["arene"]
 
-
-
-
+    dico_val=objets_voisinage(arene,num_joueur,10)
+    if dico_val=={}:
+        res=random.choice(directions_possibles(arene,num_joueur))
+        return res
+    for chemin,spec in dico_val.items():
+        _,valeur,id=spec
+        if id != num_joueur and id > 0:
+            if len(chemin)==1 and valeur<=val_tete and not is_protection(id,la_partie):    #condition pour manger un serpent en un pas si les conditions sont reunies
+                res=chemin
+                return res
+        if 1<=valeur<=2:            # condition , si on le temps de manger une boite de valeur 1 ou 2 
+            if case.get_val_temps(arene.get_case(arene,la_partie)):
+                res=chemin[0]
+                return res
+        
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()  
