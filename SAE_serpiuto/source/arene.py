@@ -6,7 +6,7 @@
     Module arene.py
     Ce module implémente l'API permettant de gérer l'arène du jeu
 """
-import SAE_serpiuto.source.serpent as serpent
+import serpent
 import matrice
 import case
 import random

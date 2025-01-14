@@ -14,6 +14,7 @@ import random
 import arene
 import partie
 import IA
+import serpent
 import os
 
 # Si vous souhaitez tester plusieurs IA, vous pouvez changer le

@@ -13,7 +13,7 @@ import client
 import random
 import arene
 import case
-import SAE_serpiuto.source.serpent as serpent
+import serpent
 import matrice
 direction_prec='X' # variable indiquant la décision précédente prise par le joueur. A mettre à jour soi-même
 
@@ -346,22 +346,28 @@ def mon_IA3(num_joueur:int, la_partie:dict)->str:
     res=''
     val_tete=0      #pas encore codé
     arene=la_partie["arene"]
-
     dico_val=objets_voisinage(arene,num_joueur,10)
     if dico_val=={}:
         res=random.choice(directions_possibles(arene,num_joueur))
         return res
     for chemin,spec in dico_val.items():
-        _,valeur,id=spec
+        longueur,valeur,id=spec
         if id != num_joueur and id > 0:
-            if len(chemin)==1 and valeur<=val_tete and not is_protection(id,la_partie):    #condition pour manger un serpent en un pas si les conditions sont reunies
+            if longueur==1 and valeur<=val_tete and not is_protection(id,la_partie):    #condition pour manger un serpent en un pas si les conditions sont reunies
                 res=chemin
                 return res
-        if 1<=valeur<=2:            # condition , si on le temps de manger une boite de valeur 1 ou 2 
-            if case.get_val_temps(arene.get_case(arene,la_partie)):
+        if 1<=valeur<=2 and id == 0 :            # condition , si on le temps de manger une boite de valeur 1 ou 2 
+            if case.get_val_temps(arene.get_case(arene,la_partie))<=longueur:    #get_case pas encore créé
                 res=chemin[0]
                 return res
-        
+        if valeur==-5 and id == 0 and not is_protection(num_joueur,la_partie) and case.get_val_temps(arene.get_case(arene,la_partie))<=longueur:   
+            #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
+            res=chemin[0]
+            return res
+    if res == '':
+        res=random.choice(directions_possibles(arene,num_joueur))
+        return res
+
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()  
