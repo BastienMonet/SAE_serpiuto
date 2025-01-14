@@ -49,8 +49,8 @@ def deplacement(liste,ligne,colonne):
     Returns:
         tuple: _description_
     """    
-    nouveau_li=ligne.copy()
-    nouveau_co=colonne.copy()
+    nouveau_li=ligne
+    nouveau_co=colonne
     for dir in liste:
         if dir =="N":
             ligne-=1
@@ -63,9 +63,7 @@ def deplacement(liste,ligne,colonne):
     return (nouveau_li,nouveau_co)
 
 def direction_possible_2(l_arene,x,y):
-    mat=arene["matrice"]
-    nb_lig=matrice.get_nb_lignes(mat)
-    nb_col=matrice.get_nb_colonnes(mat)
+    nb_lig,nb_col=arene.get_dim(l_arene)
     res=str()
     for dir in 'NSEO':
         if dir =='N':
@@ -114,7 +112,6 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
             for dir in direction:
                 nouvelle_liste.append([chemin]+[dir])
         chemin_liste+=nouvelle_liste
-    #print(chemin_liste)
     #on vien de cree une liste de chemin, avec tout les chemins possible de longueur 'dist_max'
     for chemin_car in chemin_liste[1:]:
         x_final,y_final=deplacement(chemin_car,x,y)
@@ -139,6 +136,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     Returns:
         str: une des lettres 'N', 'S', 'E' ou 'O' indiquant la direction que prend la tête du serpent du joueur
     """
+    print(objets_voisinage(la_partie["arene"],num_joueur,3))
     direction=random.choice("NSEO")
     direction_prec=direction #La décision prise sera la direction précédente le prochain tour
     dir_pos=arene.directions_possibles(partie.get_arene(la_partie),num_joueur)
