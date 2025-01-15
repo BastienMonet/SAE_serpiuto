@@ -479,7 +479,9 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
         return res
     for chemin,spec in dico_val.items():
         distance,valeur_case,numero_joueur=spec
-        if not chemin[0]==car_inverse(direction_prec) or direction_prec not in 'NOSE':   #permet de ne pas se manger
+        if num_joueur==numero_joueur:
+            continue
+        if not chemin[0]==car_inverse(direction_prec) or len(arene.get_serpent(l_arene,num_joueur))==1:   #permet de ne pas se manger
             if valeur_case == 1 and val_tete == 1 and numero_joueur==0:
                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<distance: 
                     res=chemin[0]
@@ -506,7 +508,17 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
                     #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
                     res=chemin[0]
                     direction_prec=res
-                    return res    
+                    return res   
+            if valeur_case==-2 and distance<=1:
+                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<distance:
+                    res=chemin[0]
+                    direction_prec=res
+                    return res   
+            if valeur_case==-1 and distance<=1:
+                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<distance:
+                    res=chemin[0]
+                    direction_prec=res
+                    return res 
     if res == '':     #si le serpent se retouve dans une impasse
         if directions_possibles(l_arene,num_joueur)=='':
             res=car_inverse(direction_prec)
