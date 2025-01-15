@@ -49,7 +49,7 @@ def directions_possibles(l_arene:dict,num_joueur:int)->str:
         res += "E"
     if est_sur_le_plateau(mat, pos_x, pos_y-1) and not case.est_mur(matrice.get_val(mat, pos_x, pos_y-1)):
         res += "O"
-    return chemin_sans_prec(res)
+    return chemin_sans_prec(res,direction_prec)
 
 def unique_liste(liste):
     """permet d'enlever les elements commun dans une liste
