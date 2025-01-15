@@ -15,7 +15,7 @@ import threading
 import client
 import partie
 import arene
-import SAE_serpiuto.source.serpent as serpent
+import serpent
 
 
 ECHELLE=1
@@ -31,7 +31,7 @@ class JeuGraphique(object):
 
     def __init__(self, lecteur_jeu, titre="SerpIUT'O", size=(1600, 1000),
                  couleur=(209, 238, 238),
-                 prefixe_image="/home/iut45/Etudiants/o22400972/Documents/1ere année/SAE/SAEpython2.0/SAE_serpiuto/SAE_serpiuto/img"):
+                 prefixe_image="../img/"):
         """Method docstring."""
         self.lecteur_jeu=lecteur_jeu
         self.partie,message_info=lecteur_jeu.get_partie()
@@ -66,7 +66,7 @@ class JeuGraphique(object):
         self.surface = pygame.display.get_surface()
         self.maj_parametres()
 
-    def get_images(self, prefixe_image="/home/iut45/Etudiants/o22400972/Documents/1ere année/SAE/SAEpython2.0/SAE_serpiuto/SAE_serpiuto/img"):
+    def get_images(self, prefixe_image="../img/"):
         if os.path.isfile(os.path.join(prefixe_image, 'mur.png')):
             mur = pygame.image.load(os.path.join(prefixe_image, 'mur.png'))
             self.mur=pygame.transform.smoothscale(mur, (ECHELLE*16,ECHELLE*16))
