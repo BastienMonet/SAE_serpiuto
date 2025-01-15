@@ -220,8 +220,8 @@ def pos_a_distance(l_arene:dict, num_joueur, dist_max:int)->list:
                                 
         compteur += 1
         voisin_act = voisin_suiv
-    # matrice.affiche(calque)
-    #print(liste_positions)
+    matrice.affiche(calque)
+    print(liste_positions)
     return liste_positions, calque
 
 def fabrique_chemin(calque, position_arr):
@@ -454,7 +454,8 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     l_arene=la_partie["arene"]
     val_tete=get_val_tete(num_joueur,l_arene)  
     pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0]
-    dico_val=objets_voisinage(l_arene,num_joueur,20)
+    dico_val=objets_voisinage(l_arene,num_joueur,10)
+    print(dico_val)
     global direction_prec
     if dico_val=={}:
         res=random.choice(directions_possibles(l_arene,num_joueur))
