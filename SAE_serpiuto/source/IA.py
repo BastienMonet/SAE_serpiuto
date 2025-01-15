@@ -49,7 +49,7 @@ def directions_possibles(l_arene:dict,num_joueur:int)->str:
         res += "E"
     if est_sur_le_plateau(mat, pos_x, pos_y-1) and not case.est_mur(matrice.get_val(mat, pos_x, pos_y-1)):
         res += "O"
-    return res
+    return chemin_sans_prec(res)
 
 def unique_liste(liste):
     """permet d'enlever les elements commun dans une liste
@@ -362,6 +362,27 @@ def chemin_sans_prec(chemin,prec):
                 res+=lettr
     return res
 
+def car_inverse(prec):
+    """renvoi la direction impossible a prendre
+
+    Args:
+        car (_type_): _description_
+        prec (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    if prec=='X':
+        return 'A'
+    if prec=='N':
+        return 'S'
+    if prec=='S':
+        return 'N'
+    if prec=='O':
+        return 'E'
+    if prec=='E':
+        return 'O'
+
 def mini_chemin_boite(liste,val_tete):
     """renvoi le plus petit chemin pour aller vers une boite , en fontion de la valeur de la tete
     le dico est trié par rapport au clé, donc du chemin le plus rapide au plus long
@@ -440,20 +461,25 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
         return res
     for chemin,spec in dico_val.items():
         distance,valeur_case,numero_joueur=spec
-        if numero_joueur != num_joueur and numero_joueur > 0:
-            if distance==1 and valeur_case<=val_tete and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
+        if not chemin[0]==car_inverse(direction_prec) or direction_prec=='X':
+            if numero_joueur != num_joueur and numero_joueur > 0:
+                if distance==1 and valeur_case<=val_tete and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
+                    res=chemin[0]
+                    direction_prec=res
+                    return res
+            if 1<=valeur_case<=2 and numero_joueur == 0 :            # condition , si on le temps de manger une boite de valeur 1 ou 2 
+                if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
+                    res=chemin[0]
+                    direction_prec=res
+                    return res
+            if valeur_case==-5 and numero_joueur == 0 and not is_protection(num_joueur,l_arene):
+                #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
                 res=chemin[0]
+                direction_prec=res
                 return res
-        if 1<=valeur_case<=2 and numero_joueur == 0 :            # condition , si on le temps de manger une boite de valeur 1 ou 2 
-            if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
-                res=chemin[0]
-                return res
-        if valeur_case==-5 and numero_joueur == 0 and not is_protection(num_joueur,l_arene):
-            #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
-            res=chemin[0]
-            return res
     if res == '':
-        res=random.choice(directions_possibles(l_arene,num_joueur))
+        res=car_inverse(direction_prec)
+        direction_prec=res
         return res
 
 
