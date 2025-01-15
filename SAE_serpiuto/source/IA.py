@@ -220,7 +220,7 @@ def pos_a_distance(l_arene:dict, num_joueur, dist_max:int)->list:
                                 
         compteur += 1
         voisin_act = voisin_suiv
-    #matrice.affiche(calque)
+    matrice.affiche(calque)
     #print(liste_positions)
     return liste_positions, calque
 
@@ -472,12 +472,18 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     dico_val=objets_voisinage(l_arene,num_joueur,9) #valeur 9 car c'est la distance maximum que l'on peut parcourir avant que l'objet disparraisse
     #print(dico_val)
     global direction_prec
+    print(direction_prec)
     if dico_val=={}:
         res=random.choice(directions_possibles(l_arene,num_joueur))
+        direction_prec=res
         return res
     for chemin,spec in dico_val.items():
         distance,valeur_case,numero_joueur=spec
-        if not chemin[0]==car_inverse(direction_prec) or direction_prec=='X':   #permet de ne pas se manger
+        if not chemin[0]==car_inverse(direction_prec) or direction_prec not in 'NOSE ':   #permet de ne pas se manger
+            if valeur_case == 1 and val_tete == 1 and num_joueur != numero_joueur:
+                res=chemin[0]
+                direction_prec=res
+                return res
             if distance==1 and numero_joueur != num_joueur and numero_joueur > 0:
                 if valeur_case<=val_tete or is_surpuissance(num_joueur,l_arene) and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
                     res=chemin[0]
@@ -495,9 +501,15 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
                     direction_prec=res
                     return res
     if res == '':     #si le serpent se retouve dans une impasse
-        res=random.choice(directions_possibles(l_arene,num_joueur))
-        direction_prec=res
-        return res
+        if directions_possibles(l_arene,num_joueur)=='':
+            res=car_inverse(direction_prec)
+            direction_prec=res
+            return res
+        else:
+            res=random.choice(directions_possibles(l_arene,num_joueur))
+            direction_prec=res
+            return res
+            
 
 
 if __name__=="__main__":
