@@ -330,7 +330,7 @@ def get_val_tete(num_joueur, l_arene):
     Returns:
         _type_: _description_
     """
-    pos_x, pos_y = case.get_serpent(l_arene, num_joueur)[0] # get la position de la tête du serpent
+    pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0] # get la position de la tête du serpent
     return case.get_val_boite(l_arene["matrice"][pos_x][pos_y])
 
 
