@@ -467,7 +467,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
                     res=chemin
                     direction_prec=res
                     return res
-            if 1<=valeur_case<=2 and numero_joueur == 0 and get_val_tete>=valeur_case:            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
+            if 1<=valeur_case<=2 and numero_joueur == 0 and get_val_tete(num_joueur,l_arene)>=valeur_case:            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
                     res=chemin[0]
                     direction_prec=res
@@ -477,7 +477,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
                 res=chemin[0]
                 direction_prec=res
                 return res
-    if res == '':
+    if res == '':     #si le serpent se retouve dans une impasse
         res=car_inverse(direction_prec)
         direction_prec=res
         return res
