@@ -318,6 +318,21 @@ def is_protection(num_joueur,la_partie):
     """
     return serpent.get_temps_protection(arene.get_serpent(la_partie["arene"],num_joueur))>0
 
+def get_val_tete(num_joueur, l_arene):
+    """get la valeur de la tête du serpent du joueur num_joueur
+
+    Args:
+        num_joueur (int): le numero du joueur dont on souhaite évalué la tête
+        l_arene (dict): l'arène
+
+    Returns:
+        _type_: _description_
+    """
+    pos_x, pos_y = case.get_serpent(l_arene, num_joueur)[0] # get la position de la tête du serpent
+    return case.get_val_boite(l_arene["matrice"][pos_x][pos_y])
+
+
+
 def mini_chemin_boite(liste,val_tete):
     """renvoi le plus petit chemin pour aller vers une boite , en fontion de la valeur de la tete
     le dico est trié par rapport au clé, donc du chemin le plus rapide au plus long
