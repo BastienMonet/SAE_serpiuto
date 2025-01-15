@@ -330,10 +330,37 @@ def get_val_tete(num_joueur, l_arene):
     Returns:
         _type_: _description_
     """
-    pos_x, pos_y = case.get_serpent(l_arene, num_joueur)[0] # get la position de la tête du serpent
-    return case.get_val_boite(l_arene["matrice"][pos_x][pos_y])
+    pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0] # get la position de la tête du serpent
+    #print(arene.get_val_boite(l_arene,pos_x,pos_y))
+    return arene.get_val_boite(l_arene,pos_x,pos_y)
 
+def chemin_sans_prec(chemin,prec):
+    """renvoi la liste des direction possible sans la direction opposé, pour ne pas se manger soit meme
 
+    Args:
+        chemin (_type_): _description_
+        prec (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    res=''
+    if prec=='X':   #initialisation du debut, lors du premier deplacement
+        return chemin
+    for lettr in chemin:
+        if prec=='N':
+            if not lettr=='S':
+                res+=lettr
+        if prec=='S':
+            if not lettr=='N':
+                res+=lettr
+        if prec=='O':
+            if not lettr=='E':
+                res+=lettr
+        if prec=='E':
+            if not lettr=='O':
+                res+=lettr
+    return res
 
 def mini_chemin_boite(liste,val_tete):
     """renvoi le plus petit chemin pour aller vers une boite , en fontion de la valeur de la tete
@@ -403,10 +430,11 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
         str: _description_
     """
     res=''
-    val_tete=0      #pas encore codé
     l_arene=la_partie["arene"]
+    val_tete=get_val_tete(num_joueur,l_arene)  
     pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0]
     dico_val=objets_voisinage(l_arene,num_joueur,20)
+    global direction_prec
     if dico_val=={}:
         res=random.choice(directions_possibles(l_arene,num_joueur))
         return res
