@@ -289,7 +289,7 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
 def mon_IA2(num_joueur:int, la_partie:dict)->str:
     return 'N'
 
-def mon_IA(num_joueur:int, la_partie:dict)->str:
+def mon_IA3(num_joueur:int, la_partie:dict)->str:
     """Fonction qui va prendre la decision du prochain coup pour le joueur de numéro ma_couleur
 
     Args:
@@ -348,7 +348,7 @@ def mini_chemin_boite(liste,val_tete):
         if val==cible and propri==0:
             return chemin
 
-def mon_IA3(num_joueur:int, la_partie:dict)->str: 
+def mon_IA(num_joueur:int, la_partie:dict)->str: 
     """cette fonction renvoie la direction a prendre, en fonction de la position du joueur et de l'invironement
 
     Args:
