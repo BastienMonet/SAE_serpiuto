@@ -220,8 +220,8 @@ def pos_a_distance(l_arene:dict, num_joueur, dist_max:int)->list:
                                 
         compteur += 1
         voisin_act = voisin_suiv
-    matrice.affiche(calque)
-    print(liste_positions)
+    #matrice.affiche(calque)
+    #print(liste_positions)
     return liste_positions, calque
 
 def fabrique_chemin(calque, position_arr):
@@ -317,8 +317,23 @@ def is_protection(num_joueur,l_arene):
     Args:
         num_joueur (int): numero du joueur dont on veut verifier la protection
         l_arene (dict): l'arène
+    return bool
     """
-    return serpent.get_temps_protection(trouve_serpent(num_joueur, l_arene))>0 # utilisation de liste par comprehension t'a vu j'suis trop chaud
+    return serpent.get_temps_protection(trouve_serpent(num_joueur, l_arene))>0 
+
+
+def is_surpuissance(num_joueur,l_arene):
+    """permet de savoir si le serpent possede le bonus surpuissance
+
+    Args:
+        num_joueur (_type_): _description_
+        l_arene (_type_): _description_
+
+    Returns:
+        bool: _description_
+    """
+    return serpent.get_temps_surpuissance(trouve_serpent(num_joueur, l_arene))>0 
+
 
 def get_val_tete(num_joueur, l_arene):
     """get la valeur de la tête du serpent du joueur num_joueur
@@ -372,8 +387,6 @@ def car_inverse(prec):
     Returns:
         _type_: _description_
     """
-    if prec=='X':
-        return 'A'
     if prec=='N':
         return 'S'
     if prec=='S':
@@ -416,6 +429,8 @@ def get_case_from_chemin(chemin, pos_x, pos_y, l_arene):
     return matrice.get_val(l_arene["matrice"], pos_final_x, pos_final_y)
 
 
+
+
 def mon_IA2(num_joueur:int, la_partie:dict)->str:
     return 'N'
 
@@ -454,32 +469,33 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     l_arene=la_partie["arene"]
     val_tete=get_val_tete(num_joueur,l_arene)  
     pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0]
-    dico_val=objets_voisinage(l_arene,num_joueur,10)
-    print(dico_val)
+    dico_val=objets_voisinage(l_arene,num_joueur,9) #valeur 9 car c'est la distance maximum que l'on peut parcourir avant que l'objet disparraisse
+    #print(dico_val)
     global direction_prec
     if dico_val=={}:
         res=random.choice(directions_possibles(l_arene,num_joueur))
         return res
     for chemin,spec in dico_val.items():
         distance,valeur_case,numero_joueur=spec
-        if not chemin[0]==car_inverse(direction_prec) or direction_prec=='X':
+        if not chemin[0]==car_inverse(direction_prec) or direction_prec=='X':   #permet de ne pas se manger
             if distance==1 and numero_joueur != num_joueur and numero_joueur > 0:
-                if distance==1 and valeur_case<=val_tete and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
-                    res=chemin
+                if valeur_case<=val_tete or is_surpuissance(num_joueur,l_arene) and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
+                    res=chemin[0]
                     direction_prec=res
                     return res
-            if 1<=valeur_case<=2 and numero_joueur == 0 and get_val_tete(num_joueur,l_arene)>=valeur_case:            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
+            if 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
                     res=chemin[0]
                     direction_prec=res
                     return res
-            if valeur_case==-5 and numero_joueur == 0 and not is_protection(num_joueur,l_arene):
-                #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
-                res=chemin[0]
-                direction_prec=res
-                return res
+            if valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):
+                if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<=distance:
+                    #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
+                    res=chemin[0]
+                    direction_prec=res
+                    return res
     if res == '':     #si le serpent se retouve dans une impasse
-        res=car_inverse(direction_prec)
+        res=random.choice(directions_possibles(l_arene,num_joueur))
         direction_prec=res
         return res
 
