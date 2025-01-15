@@ -56,31 +56,28 @@ def unique_liste(liste):
             liste_unique.append(chaine)
     return liste_unique
 
-def deplacement(liste,ligne,colonne):
-    """calcule la nouvelle position en fonction d'une liste de deplacement et d'un 
+def deplacement(chemin,ligne,colonne):
+    """calcule la nouvelle position en fonction d'un chemin de caractère NSEO de deplacement et d'un 
     etat initial
 
     Args:
-        liste (_type_): _description_
-        ligne (_type_): _description_
-        colonne (_type_): _description_
+        chemin (str): une suite de carractère NSEO
+        ligne (int): la position x
+        colonne (int): la position y
 
     Returns:
         tuple: _description_
     """    
-    nouveau_li=ligne
-    nouveau_co=colonne
-    if liste is not None:
-        for dir in liste:
-            if dir =="N":
-                nouveau_li-=1
-            if dir =="S":
-                nouveau_li+=1
-            if dir =="O":
-                nouveau_co-=1
-            if dir =="E":
-                nouveau_co+=1
-    return (nouveau_li,nouveau_co)
+    for dir in chemin:
+        if dir =="N":
+            ligne-=1
+        if dir =="S":
+            ligne+=1
+        if dir =="O":
+            colonne-=1
+        if dir =="E":
+            colonne+=1
+    return (ligne,colonne)
 
 def direction_possible_2(l_arene,x,y):
     """calcul les direcion possible mais a partir d'une coordonné
@@ -211,7 +208,7 @@ def pos_a_distance(l_arene:dict, num_joueur, dist_max:int)->list:
                                 
         compteur += 1
         voisin_act = voisin_suiv
-    matrice.affiche(calque)
+    # matrice.affiche(calque)
     #print(liste_positions)
     return liste_positions, calque
 
@@ -284,31 +281,6 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
         res[cardinal] = [matrice.get_val(calque, position[0], position[1]), arene.get_val_boite(l_arene, position[0], position[1]), arene.get_proprietaire(l_arene, position[0], position[1])]
     return res
 
-
-
-def mon_IA2(num_joueur:int, la_partie:dict)->str:
-    return 'N'
-
-def mon_IA3(num_joueur:int, la_partie:dict)->str:
-    """Fonction qui va prendre la decision du prochain coup pour le joueur de numéro ma_couleur
-
-    Args:
-        num_joueur (int): un entier désignant le numero du joueur qui doit prendre la décision
-        la_partie (dict): structure qui contient la partie en cours
-
-    Returns:
-        str: une des lettres 'N', 'S', 'E' ou 'O' indiquant la direction que prend la tête du serpent du joueur
-    """
-    print(objets_voisinage(la_partie["arene"], num_joueur, 8))    
-    direction=random.choice("NSEO")
-    direction_prec=direction #La décision prise sera la direction précédente le prochain tour
-    dir_pos=arene.directions_possibles(partie.get_arene(la_partie),num_joueur)
-    if dir_pos=='':
-        direction=random.choice('NOSE')
-    else:
-        direction=random.choice(dir_pos)
-    return direction
-
 def is_protection(num_joueur,la_partie):
     """true si un adversaire possede une protection 
 
@@ -348,6 +320,48 @@ def mini_chemin_boite(liste,val_tete):
         if val==cible and propri==0:
             return chemin
 
+
+def get_case(chemin, pos_x, pos_y, l_arene):
+    """retrouve la case arrivée à partir d'une position de départ et d'un chemin
+
+    Args:
+        chemin (str): une suite de caractère NSEO  
+        pos_x (int): la position en x
+        pos_y (int): la position en y
+
+    Returns:
+        dict: retourne la case ou l'objet ce situe
+    """
+
+    pos_final_x , pos_final_y = deplacement(chemin, pos_x, pos_y)
+    print(matrice.get_val(l_arene["matrice"], pos_final_x, pos_final_y))
+    return matrice.get_val(l_arene["matrice"], pos_final_x, pos_final_y)
+
+
+def mon_IA2(num_joueur:int, la_partie:dict)->str:
+    return 'N'
+
+def mon_IA3(num_joueur:int, la_partie:dict)->str:
+    """Fonction qui va prendre la decision du prochain coup pour le joueur de numéro ma_couleur
+
+    Args:
+        num_joueur (int): un entier désignant le numero du joueur qui doit prendre la décision
+        la_partie (dict): structure qui contient la partie en cours
+
+    Returns:
+        str: une des lettres 'N', 'S', 'E' ou 'O' indiquant la direction que prend la tête du serpent du joueur
+    """
+    print(objets_voisinage(la_partie["arene"], num_joueur, 8))    
+    direction=random.choice("NSEO")
+    direction_prec=direction #La décision prise sera la direction précédente le prochain tour
+    dir_pos=arene.directions_possibles(partie.get_arene(la_partie),num_joueur)
+    if dir_pos=='':
+        direction=random.choice('NOSE')
+    else:
+        direction=random.choice(dir_pos)
+    return direction
+
+
 def mon_IA(num_joueur:int, la_partie:dict)->str: 
     """cette fonction renvoie la direction a prendre, en fonction de la position du joueur et de l'invironement
 
@@ -360,27 +374,29 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     """
     res=''
     val_tete=0      #pas encore codé
-    arene=la_partie["arene"]
-    dico_val=objets_voisinage(arene,num_joueur,10)
+    l_arene=la_partie["arene"]
+    pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0]
+    dico_val=objets_voisinage(l_arene,num_joueur,10)
     if dico_val=={}:
-        res=random.choice(directions_possibles(arene,num_joueur))
+        res=random.choice(directions_possibles(l_arene,num_joueur))
         return res
     for chemin,spec in dico_val.items():
-        longueur,valeur,id=spec
+        print(chemin)
+        distance,valeur,id=spec
         if id != num_joueur and id > 0:
-            if longueur==1 and valeur<=val_tete and not is_protection(id,la_partie):    #condition pour manger un serpent en un pas si les conditions sont reunies
+            if distance==1 and valeur<=val_tete and not is_protection(id,la_partie):    #condition pour manger un serpent en un pas si les conditions sont reunies
                 res=chemin
                 return res
         if 1<=valeur<=2 and id == 0 :            # condition , si on le temps de manger une boite de valeur 1 ou 2 
-            if case.get_val_temps(arene.get_case(arene,la_partie))<=longueur:    #get_case pas encore créé
+            if case.get_val_temps(get_case(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
                 res=chemin[0]
                 return res
-        if valeur==-5 and id == 0 and not is_protection(num_joueur,la_partie) and case.get_val_temps(arene.get_case(arene,la_partie))<=longueur:   
+        if valeur==-5 and id == 0 and not is_protection(num_joueur,la_partie) and case.get_val_temps(l_arene.get_case(l_arene,la_partie))<=distance:   
             #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
             res=chemin[0]
             return res
     if res == '':
-        res=random.choice(directions_possibles(arene,num_joueur))
+        res=random.choice(directions_possibles(l_arene,num_joueur))
         return res
 
 
