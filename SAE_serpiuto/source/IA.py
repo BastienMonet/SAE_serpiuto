@@ -281,14 +281,32 @@ def objets_voisinage(l_arene:dict, num_joueur, dist_max:int):  # au minimum 1
         res[cardinal] = [matrice.get_val(calque, position[0], position[1]), arene.get_val_boite(l_arene, position[0], position[1]), arene.get_proprietaire(l_arene, position[0], position[1])]
     return res
 
-def is_protection(num_joueur,la_partie):
+
+def trouve_serpent(num_joueur, l_arene):
+    """trouve le serpent qui a le numero de joueur indiquer
+
+    Args:
+        num_joueur (int): numero du joueur dont on veut verifier la protection
+        l_arene (dict): l'arène
+
+    Returns:
+        dict: retourne le serpent voulu
+    """
+    for serp in l_arene["serpents"]:
+        if serpent.get_num_joueur(serp) == num_joueur:
+            return serp
+    return serp
+
+
+
+def is_protection(num_joueur,l_arene):
     """true si un adversaire possede une protection 
 
     Args:
-        num_joueur (_type_): _description_
-        la_partie (_type_): _description_
+        num_joueur (int): numero du joueur dont on veut verifier la protection
+        l_arene (dict): l'arène
     """
-    return serpent.get_temps_protection(arene.get_serpent(la_partie["arene"],num_joueur))>0
+    return serpent.get_temps_protection(trouve_serpent(num_joueur, l_arene))>0 # utilisation de liste par comprehension t'a vu j'suis trop chaud
 
 def get_val_tete(num_joueur, l_arene):
     """get la valeur de la tête du serpent du joueur num_joueur
@@ -334,7 +352,7 @@ def get_case(chemin, pos_x, pos_y, l_arene):
     """
 
     pos_final_x , pos_final_y = deplacement(chemin, pos_x, pos_y)
-    print(matrice.get_val(l_arene["matrice"], pos_final_x, pos_final_y))
+    # print(matrice.get_val(l_arene["matrice"], pos_final_x, pos_final_y))
     return matrice.get_val(l_arene["matrice"], pos_final_x, pos_final_y)
 
 
@@ -351,7 +369,7 @@ def mon_IA3(num_joueur:int, la_partie:dict)->str:
     Returns:
         str: une des lettres 'N', 'S', 'E' ou 'O' indiquant la direction que prend la tête du serpent du joueur
     """
-    print(objets_voisinage(la_partie["arene"], num_joueur, 8))    
+    # print(objets_voisinage(la_partie["arene"], num_joueur, 8))    
     direction=random.choice("NSEO")
     direction_prec=direction #La décision prise sera la direction précédente le prochain tour
     dir_pos=arene.directions_possibles(partie.get_arene(la_partie),num_joueur)
@@ -376,22 +394,21 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     val_tete=0      #pas encore codé
     l_arene=la_partie["arene"]
     pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0]
-    dico_val=objets_voisinage(l_arene,num_joueur,10)
+    dico_val=objets_voisinage(l_arene,num_joueur,20)
     if dico_val=={}:
         res=random.choice(directions_possibles(l_arene,num_joueur))
         return res
     for chemin,spec in dico_val.items():
-        print(chemin)
-        distance,valeur,id=spec
-        if id != num_joueur and id > 0:
-            if distance==1 and valeur<=val_tete and not is_protection(id,la_partie):    #condition pour manger un serpent en un pas si les conditions sont reunies
-                res=chemin
+        distance,valeur_case,numero_joueur=spec
+        if numero_joueur != num_joueur and numero_joueur > 0:
+            if distance==1 and valeur_case<=val_tete and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
+                res=chemin[0]
                 return res
-        if 1<=valeur<=2 and id == 0 :            # condition , si on le temps de manger une boite de valeur 1 ou 2 
+        if 1<=valeur_case<=2 and numero_joueur == 0 :            # condition , si on le temps de manger une boite de valeur 1 ou 2 
             if case.get_val_temps(get_case(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
                 res=chemin[0]
                 return res
-        if valeur==-5 and id == 0 and not is_protection(num_joueur,la_partie) and case.get_val_temps(l_arene.get_case(l_arene,la_partie))<=distance:   
+        if valeur_case==-5 and numero_joueur == 0 and not is_protection(num_joueur,l_arene):
             #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
             res=chemin[0]
             return res
