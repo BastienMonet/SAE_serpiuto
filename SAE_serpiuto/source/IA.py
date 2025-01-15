@@ -466,6 +466,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
         str: _description_
     """
     res=''
+    agressivite=1    #defini le niveau d'agréssivité du serpent
     l_arene=la_partie["arene"]
     val_tete=get_val_tete(num_joueur,l_arene)  
     pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0]
@@ -473,12 +474,16 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     #print(dico_val)
     global direction_prec
     print(direction_prec)
+    if val_tete>16:
+        agressivite==3
+    else:
+        agressivite==1
     if dico_val=={}:
         res=random.choice(directions_possibles(l_arene,num_joueur))
         direction_prec=res
         return res
     for chemin,spec in dico_val.items():
-        distance,valeur_case,numero_joueur=spec
+        distance,valeur_case,numero_joueur=spec        
         if num_joueur==numero_joueur:
             continue
         if not chemin[0]==car_inverse(direction_prec) or len(arene.get_serpent(l_arene,num_joueur))==1:   #permet de ne pas se manger
@@ -487,7 +492,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
                     res=chemin[0]
                     direction_prec=res
                     return res
-            if distance==1 and numero_joueur != num_joueur and numero_joueur > 0:
+            if distance==agressivite and numero_joueur != num_joueur and numero_joueur > 0:
                 if valeur_case<=val_tete or is_surpuissance(num_joueur,l_arene) and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
                     res=chemin[0]
                     direction_prec=res
@@ -509,12 +514,12 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
                     res=chemin[0]
                     direction_prec=res
                     return res   
-            if valeur_case==-2 and distance<=1:
+            if valeur_case==-2 and distance==1:
                  if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<distance:
                     res=chemin[0]
                     direction_prec=res
                     return res   
-            if valeur_case==-1 and distance<=1:
+            if valeur_case==-1 and distance==1:
                  if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<distance:
                     res=chemin[0]
                     direction_prec=res
