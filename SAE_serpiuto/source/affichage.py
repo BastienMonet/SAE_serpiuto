@@ -18,7 +18,7 @@ import arene
 import serpent
 
 
-ECHELLE=1
+ECHELLE=
 GRAND=""
 PARTIES_SERPENT={"tete_N":(0,0), "tete_E":(0,ECHELLE*16), "tete_S":(0,ECHELLE*32), "tete_O":(0,ECHELLE*48),
                  "queue_N":(ECHELLE*16,0), "queue_E":(ECHELLE*16,ECHELLE*16), "queue_S":(ECHELLE*16,ECHELLE*32), "queue_O":(ECHELLE*16,ECHELLE*48),
