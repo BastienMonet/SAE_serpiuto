@@ -196,6 +196,7 @@ def get_serpent(arene:dict,num_joueur:int)->list:
     Args:
         arene (dict): l'arène considérée
         num_joueur (int): le numéro du joueur dont on veut le serpent
+        
 
     Returns:
         list: la liste des positions occupées par le serpent du joueur
