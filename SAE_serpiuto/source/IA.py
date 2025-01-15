@@ -36,8 +36,20 @@ def directions_possibles(l_arene:dict,num_joueur:int)->str:
         str: une chaine composée de NOSE qui indique les directions
             pouvant être prise par le joueur. Attention il est possible
             qu'aucune direction ne soit possible donc la fonction peut retourner la chaine vide
-    """    
-    return arene.directions_possibles(l_arene,num_joueur)
+    """ 
+    res = ""
+    pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0]
+    mat = l_arene[matrice]
+
+    if est_sur_le_plateau(mat, pos_x-1, pos_y) and not case.est_mur(matrice.get_val(mat, pos_x-1, pos_y)):
+        res += "N"
+    if est_sur_le_plateau(mat, pos_x+1, pos_y) and not case.est_mur(matrice.get_val(mat, pos_x+1, pos_y)):
+        res += "S"
+    if est_sur_le_plateau(mat, pos_x, pos_y+1) and not case.est_mur(matrice.get_val(mat, pos_x, pos_y+1)):
+        res += "E"
+    if est_sur_le_plateau(mat, pos_x, pos_y-1) and not case.est_mur(matrice.get_val(mat, pos_x, pos_y-1)):
+        res += "O"
+    return res
 
 def unique_liste(liste):
     """permet d'enlever les elements commun dans une liste
@@ -208,7 +220,7 @@ def pos_a_distance(l_arene:dict, num_joueur, dist_max:int)->list:
                                 
         compteur += 1
         voisin_act = voisin_suiv
-    # matrice.affiche(calque)
+    # matrice.affiche(calque)
     #print(liste_positions)
     return liste_positions, calque
 
@@ -339,7 +351,7 @@ def mini_chemin_boite(liste,val_tete):
             return chemin
 
 
-def get_case(chemin, pos_x, pos_y, l_arene):
+def get_case_from_chemin(chemin, pos_x, pos_y, l_arene):
     """retrouve la case arrivée à partir d'une position de départ et d'un chemin
 
     Args:
@@ -405,7 +417,7 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
                 res=chemin[0]
                 return res
         if 1<=valeur_case<=2 and numero_joueur == 0 :            # condition , si on le temps de manger une boite de valeur 1 ou 2 
-            if case.get_val_temps(get_case(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
+            if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
                 res=chemin[0]
                 return res
         if valeur_case==-5 and numero_joueur == 0 and not is_protection(num_joueur,l_arene):
