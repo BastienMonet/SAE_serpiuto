@@ -462,12 +462,12 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     for chemin,spec in dico_val.items():
         distance,valeur_case,numero_joueur=spec
         if not chemin[0]==car_inverse(direction_prec) or direction_prec=='X':
-            if numero_joueur != num_joueur and numero_joueur > 0:
+            if distance==1 and numero_joueur != num_joueur and numero_joueur > 0:
                 if distance==1 and valeur_case<=val_tete and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
-                    res=chemin[0]
+                    res=chemin
                     direction_prec=res
                     return res
-            if 1<=valeur_case<=2 and numero_joueur == 0 :            # condition , si on le temps de manger une boite de valeur 1 ou 2 
+            if 1<=valeur_case<=2 and numero_joueur == 0 and get_val_tete>=valeur_case:            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]<=distance:  
                     res=chemin[0]
                     direction_prec=res
