@@ -49,24 +49,8 @@ def directions_possibles(l_arene:dict,num_joueur:int)->str:
         res += "E"
     if est_sur_le_plateau(mat, pos_x, pos_y-1) and not case.est_mur(matrice.get_val(mat, pos_x, pos_y-1)):
         res += "O"
-    return chemin_sans_prec(res,direction_prec)
+    return chemin_sans_prec(res,direction_prec)    #condition suplémentaire, pour eviter de revenir sur le chemin et par conséquant de se manger soi-meme
 
-def unique_liste(liste):
-    """permet d'enlever les elements commun dans une liste
-
-    Args:
-        liste (list): liste de liste
-
-    Returns:
-        list: _description_
-    """
-    vue = set()
-    liste_unique = []
-    for chaine in liste:
-        if chaine not in vue:
-            vue.add(chaine)
-            liste_unique.append(chaine)
-    return liste_unique
 
 def deplacement(chemin,ligne,colonne):
     """calcule la nouvelle position en fonction d'un chemin de caractère NSEO de deplacement et d'un 
@@ -91,38 +75,6 @@ def deplacement(chemin,ligne,colonne):
             colonne+=1
     return (ligne,colonne)
 
-def direction_possible_2(l_arene,x,y):
-    """calcul les direcion possible mais a partir d'une coordonné
-
-    Args:
-        l_arene (_type_): _description_
-        x (_type_): _description_
-        y (_type_): _description_
-
-    Returns:
-        str: _description_
-    """
-    nb_lig,nb_col=arene.get_dim(l_arene)
-    res=str()
-    for dir in 'NSEO':
-        if dir =='N':
-            if not x-1<0:
-                if not arene.est_mur(l_arene,x-1,y):
-                    res+=dir
-        if dir =='S':
-            if x+1<nb_lig:
-                if not arene.est_mur(l_arene,x+1,y):
-                    res+=dir
-        if dir =='O':
-            if not y-1<0:
-                if not arene.est_mur(l_arene,x,y-1):
-                    res+=dir
-        if dir =='E':
-            if y+1<nb_col:
-                if not arene.est_mur(l_arene,x,y+1):
-                    res+=dir
-    return res
-    
 
 def est_sur_le_plateau(la_matrice, pos_x, pos_y):
     """Indique si la position est bien sur le plateau
@@ -378,23 +330,25 @@ def chemin_sans_prec(chemin,prec):
     return res
 
 def car_inverse(prec):
-    """renvoi la direction impossible a prendre
+    """renvoi la direction impossible a prendre, utile pour revinir en arriere lors d'une impasse
 
     Args:
-        car (_type_): _description_
         prec (_type_): _description_
 
     Returns:
-        _type_: _description_
+        str: _description_
     """
+    res=''
     if prec=='N':
-        return 'S'
-    if prec=='S':
-        return 'N'
-    if prec=='O':
-        return 'E'
-    if prec=='E':
-        return 'O'
+        res= 'S'
+    elif prec=='S':
+        res= 'N'
+    elif prec=='O':
+        rres= 'E'
+    elif prec=='E':
+        res= 'O'
+    return res
+
 
 def mini_chemin_boite(liste,val_tete):
     """renvoi le plus petit chemin pour aller vers une boite , en fontion de la valeur de la tete
@@ -476,55 +430,45 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
         agressivite=3     #defini le niveau d'agréssivité du serpent
     else:
         agressivite=1
-    if dico_val=={}:
+    if dico_val=={}:        #si il n'y a pas d'objet mangeable sur le terrain alors je renvoi une direction possible aléatoire
         res=random.choice(directions_possibles(l_arene,num_joueur))
         direction_prec=res
         print(res)
-        return res
     for chemin,spec in dico_val.items():
         distance,valeur_case,numero_joueur=spec               
         if num_joueur==numero_joueur:    #permet de ne pas regarder notre serpent
-            continue
-        est_mangeable=case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance
+            continue        
         if not chemin[0]==car_inverse(direction_prec) or len(arene.get_serpent(l_arene,num_joueur))==1:   #permet de ne pas se manger
             if distance<=agressivite and numero_joueur > 0:
                 if valeur_case<=val_tete or is_surpuissance(num_joueur,l_arene) and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
                     res=chemin[0]
                     direction_prec=res
                     print(res)
-            elif est_mangeable:   
-                if valeur_case == 1  or valeur_case == -1 or valeur_case == -2 and val_tete == 1 and numero_joueur==0:
-                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance: 
-                        res=chemin[0]
-                        direction_prec=res
-                        print(res)                
-                if 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
-                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:  
-                        res=chemin[0]
-                        direction_prec=res
-                        print(res)
-                if valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):
-                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
-                        #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
-                        res=chemin[0]
-                        direction_prec=res
-                        print(res)
-                if valeur_case==-4 and distance<=2 and not is_surpuissance(num_joueur,l_arene):
-                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
-                        #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
-                        res=chemin[0]
-                        direction_prec=res
-                        print(res) 
-                if valeur_case==-2 and distance==1:
-                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
-                        res=chemin[0]
-                        direction_prec=res
-                        print(res)  
-                if valeur_case==-1 and distance==1:
-                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
-                        res=chemin[0]
-                        direction_prec=res
-                        print(res) 
+            elif case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>distance:   #pour toute les case non-joueur, si on a la tps de manger la boite ou le bonus
+                if valeur_case == 1  or valeur_case == -1 or valeur_case == -2 and val_tete == 1 and numero_joueur==0:  #si la tete est de 1, utile au debut pour grandir rapidement
+                    res=chemin[0]
+                    direction_prec=res
+                    print(res)                
+                elif 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):    # condition pour manger une boite de valeur 1 ou 2 
+                    res=chemin[0]
+                    direction_prec=res
+                    print(res)
+                elif valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):    #condition pour savoir si il faut aller chercher un bonus protection                
+                    res=chemin[0]
+                    direction_prec=res
+                    print(res)
+                elif valeur_case==-4 and distance<=2 and not is_surpuissance(num_joueur,l_arene):     #condition pour aller chercher un bonus surpuissance         
+                    res=chemin[0]
+                    direction_prec=res
+                    print(res) 
+                elif valeur_case==-2 and distance==1:       #condition pour chercher un bonus multiplication 
+                    res=chemin[0]
+                    direction_prec=res
+                    print(res)  
+                elif valeur_case==-1 and distance==1:       #condition pour chercher un bonus addition
+                    res=chemin[0]
+                    direction_prec=res
+                    print(res) 
     if res == '':    #dernier cas de base, pour ne pas retourner un str vide
         if directions_possibles(l_arene,num_joueur)=='':
             res=car_inverse(direction_prec)  #si le serpent se retouve dans une impasse
