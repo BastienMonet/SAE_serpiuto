@@ -435,25 +435,25 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     else:
         for chemin,spec in dico_val.items():
             distance,valeur_case,numero_joueur=spec               
-            if num_joueur==numero_joueur:    #permet de ne pas regarder notre serpent
-                continue        
-            if not chemin[0]==car_inverse(direction_prec) or len(arene.get_serpent(l_arene,num_joueur))==1:   #permet de ne pas se manger
-                if distance<=agressivite and numero_joueur > 0:
-                    if valeur_case<=val_tete or is_surpuissance(num_joueur,l_arene) and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
-                        res=chemin[0]                    
-                elif case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:   #pour toute les cases non-joueur, si on a la tps de manger la boite ou le bonus
-                    if valeur_case == 1  or valeur_case == -1 or valeur_case == -2 and val_tete == 1 and numero_joueur==0:  #si la tete est de 1, utile au debut pour grandir rapidement
-                        res=chemin[0] 
-                    elif valeur_case==-2 and distance==1:       #condition pour chercher un bonus multiplication 
-                        res=chemin[0]                    
-                    elif valeur_case==-1 and distance==1:       #condition pour chercher un bonus addition
-                        res=chemin[0]                    
-                    elif 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):    # condition pour manger une boite de valeur 1 ou 2 
-                        res=chemin[0]                                         
-                    elif valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):    #condition pour savoir si il faut aller chercher un bonus protection                
-                        res=chemin[0]                    
-                    elif valeur_case==-4 and distance<=2 and not is_surpuissance(num_joueur,l_arene):     #condition pour aller chercher un bonus surpuissance         
-                        res=chemin[0]                           
+            if num_joueur!=numero_joueur:    #permet de ne pas regarder notre serpent      
+                if not chemin[0]==car_inverse(direction_prec) or len(arene.get_serpent(l_arene,num_joueur))==1:   #permet de ne pas se manger
+                    if distance<=agressivite and numero_joueur > 0:
+                        if valeur_case<=val_tete or is_surpuissance(num_joueur,l_arene) and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
+                            res=chemin[0]   
+                    elif numero_joueur==0:    #la chose la plus proche n'est pas un joueur             
+                        if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:   #pour toute les cases non-joueur, si on a la tps de manger la boite ou le bonus
+                            if valeur_case == 1  or valeur_case == -1 or valeur_case == -2 and val_tete == 1 and numero_joueur==0:  #si la tete est de 1, utile au debut pour grandir rapidement
+                                res=chemin[0] 
+                            elif valeur_case==-2 and distance==1:       #condition pour chercher un bonus multiplication 
+                                res=chemin[0]                    
+                            elif valeur_case==-1 and distance==1:       #condition pour chercher un bonus addition
+                                res=chemin[0]                    
+                            elif 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):    # condition pour manger une boite de valeur 1 ou 2 
+                                res=chemin[0]                                         
+                            elif valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):    #condition pour savoir si il faut aller chercher un bonus protection                
+                                res=chemin[0]                    
+                            elif valeur_case==-4 and distance<=2 and not is_surpuissance(num_joueur,l_arene):     #condition pour aller chercher un bonus surpuissance         
+                                res=chemin[0]                           
     if res == '':    #dernier cas de base, pour ne pas retourner un str vide
         if directions_possibles(l_arene,num_joueur)=='':
             res=car_inverse(direction_prec)  #si le serpent se retouve dans une impasse         
