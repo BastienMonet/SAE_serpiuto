@@ -344,7 +344,7 @@ def car_inverse(prec):
     elif prec=='S':
         res= 'N'
     elif prec=='O':
-        rres= 'E'
+        res= 'E'
     elif prec=='E':
         res= 'O'
     return res

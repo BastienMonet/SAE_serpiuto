@@ -1,13 +1,15 @@
 # SAE_serpiuto
 
 
-python serveur
+
+
+python3 serveur.py
 
 python3 affichage.py&
 python3 IA.py --equipe joueur1&
-python3 LVL3.py --equipe joueur2&
-python3 LVL3.py --equipe joueur3&
-python3 LVL3.py --equipe joueur4
+python3 IA.py --equipe joueur2&
+python3 IA.py --equipe joueur3&
+python3 IA.py --equipe joueur4
 
 
 
@@ -15,4 +17,4 @@ python3 LVL3.py --equipe joueur4
 286,179,154,34
 
 2eme:
-1608,1123,530,179
+1608,1123,530,179 
