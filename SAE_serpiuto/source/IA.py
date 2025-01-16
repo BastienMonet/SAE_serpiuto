@@ -382,33 +382,6 @@ def get_case_from_chemin(chemin, pos_x, pos_y, l_arene):
     # print(matrice.get_val(l_arene["matrice"], pos_final_x, pos_final_y))
     return matrice.get_val(l_arene["matrice"], pos_final_x, pos_final_y)
 
-
-
-
-def mon_IA2(num_joueur:int, la_partie:dict)->str:
-    return 'N'
-
-def mon_IA3(num_joueur:int, la_partie:dict)->str:
-    """Fonction qui va prendre la decision du prochain coup pour le joueur de numéro ma_couleur
-
-    Args:
-        num_joueur (int): un entier désignant le numero du joueur qui doit prendre la décision
-        la_partie (dict): structure qui contient la partie en cours
-
-    Returns:
-        str: une des lettres 'N', 'S', 'E' ou 'O' indiquant la direction que prend la tête du serpent du joueur
-    """
-    # print(objets_voisinage(la_partie["arene"], num_joueur, 8))    
-    direction=random.choice("NSEO")
-    direction_prec=direction #La décision prise sera la direction précédente le prochain tour
-    dir_pos=arene.directions_possibles(partie.get_arene(la_partie),num_joueur)
-    if dir_pos=='':
-        direction=random.choice('NOSE')
-    else:
-        direction=random.choice(dir_pos)
-    return direction
-
-
 def mon_IA(num_joueur:int, la_partie:dict)->str: 
     """cette fonction renvoie la direction a prendre, en fonction de la position du joueur et de l'invironement
 
