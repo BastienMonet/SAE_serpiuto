@@ -465,86 +465,76 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     Returns:
         str: _description_
     """
-    res=''
-    agressivite=1    #defini le niveau d'agréssivité du serpent
+    res='' 
     l_arene=la_partie["arene"]
     val_tete=get_val_tete(num_joueur,l_arene)  
-    # print(val_tete)
     pos_x, pos_y = arene.get_serpent(l_arene, num_joueur)[0]
     dico_val=objets_voisinage(l_arene,num_joueur,9) #valeur 9 car c'est la distance maximum que l'on peut parcourir avant que l'objet disparraisse
     # print(dico_val)
     global direction_prec
-    #print(direction_prec)
-    if val_tete>16:
-        agressivite==3
+    if val_tete>=16:
+        agressivite=3     #defini le niveau d'agréssivité du serpent
     else:
-        agressivite==1
+        agressivite=1
     if dico_val=={}:
         res=random.choice(directions_possibles(l_arene,num_joueur))
         direction_prec=res
         print(res)
         return res
     for chemin,spec in dico_val.items():
-        distance,valeur_case,numero_joueur=spec       
-        if num_joueur==numero_joueur:
+        distance,valeur_case,numero_joueur=spec               
+        if num_joueur==numero_joueur:    #permet de ne pas regarder notre serpent
             continue
+        est_mangeable=case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance
         if not chemin[0]==car_inverse(direction_prec) or len(arene.get_serpent(l_arene,num_joueur))==1:   #permet de ne pas se manger
-            if valeur_case == 1  or valeur_case == -1 or valeur_case == -2 and val_tete == 1 and numero_joueur==0:
-                if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance: 
-                    res=chemin[0]
-                    direction_prec=res
-                    print(res)
-                    return res
             if distance<=agressivite and numero_joueur > 0:
                 if valeur_case<=val_tete or is_surpuissance(num_joueur,l_arene) and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
                     res=chemin[0]
                     direction_prec=res
                     print(res)
-                    return res
-            if 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
-                if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:  
-                    res=chemin[0]
-                    direction_prec=res
-                    print(res)
-                    return res
-            if valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):
-                if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
-                    #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
-                    res=chemin[0]
-                    direction_prec=res
-                    print(res)
-                    return res
-            if valeur_case==-4 and distance<=2 and not is_surpuissance(num_joueur,l_arene):
-                if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
-                    #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
-                    res=chemin[0]
-                    direction_prec=res
-                    print(res)
-                    return res   
-            if valeur_case==-2 and distance==1:
-                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
-                    res=chemin[0]
-                    direction_prec=res
-                    print(res)
-                    return res   
-            if valeur_case==-1 and distance==1:
-                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
-                    res=chemin[0]
-                    direction_prec=res
-                    print(res)
-                    return res 
-    if res == '':     #si le serpent se retouve dans une impasse
+            elif est_mangeable:   
+                if valeur_case == 1  or valeur_case == -1 or valeur_case == -2 and val_tete == 1 and numero_joueur==0:
+                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance: 
+                        res=chemin[0]
+                        direction_prec=res
+                        print(res)                
+                if 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
+                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:  
+                        res=chemin[0]
+                        direction_prec=res
+                        print(res)
+                if valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):
+                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
+                        #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
+                        res=chemin[0]
+                        direction_prec=res
+                        print(res)
+                if valeur_case==-4 and distance<=2 and not is_surpuissance(num_joueur,l_arene):
+                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
+                        #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
+                        res=chemin[0]
+                        direction_prec=res
+                        print(res) 
+                if valeur_case==-2 and distance==1:
+                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
+                        res=chemin[0]
+                        direction_prec=res
+                        print(res)  
+                if valeur_case==-1 and distance==1:
+                    if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:
+                        res=chemin[0]
+                        direction_prec=res
+                        print(res) 
+    if res == '':    #dernier cas de base, pour ne pas retourner un str vide
         if directions_possibles(l_arene,num_joueur)=='':
-            res=car_inverse(direction_prec)
+            res=car_inverse(direction_prec)  #si le serpent se retouve dans une impasse
             direction_prec=res
             print(res)
-            return res
         else:
             res=random.choice(directions_possibles(l_arene,num_joueur))
             direction_prec=res
             print(res)
-            return res
-            
+    return res
 
 
 if __name__=="__main__":
