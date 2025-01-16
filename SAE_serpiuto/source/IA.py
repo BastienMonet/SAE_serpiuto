@@ -433,7 +433,6 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
     if dico_val=={}:        #si il n'y a pas d'objet mangeable sur le terrain alors je renvoi une direction possible aléatoire
         res=random.choice(directions_possibles(l_arene,num_joueur))
         direction_prec=res
-        print(res)
     for chemin,spec in dico_val.items():
         distance,valeur_case,numero_joueur=spec               
         if num_joueur==numero_joueur:    #permet de ne pas regarder notre serpent
@@ -442,42 +441,34 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
             if distance<=agressivite and numero_joueur > 0:
                 if valeur_case<=val_tete or is_surpuissance(num_joueur,l_arene) and not is_protection(numero_joueur,l_arene):    #condition pour manger un serpent en un pas si les conditions sont reunies
                     res=chemin[0]
-                    direction_prec=res
-                    print(res)
+                    
             elif case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>distance:   #pour toute les case non-joueur, si on a la tps de manger la boite ou le bonus
                 if valeur_case == 1  or valeur_case == -1 or valeur_case == -2 and val_tete == 1 and numero_joueur==0:  #si la tete est de 1, utile au debut pour grandir rapidement
                     res=chemin[0]
-                    direction_prec=res
-                    print(res)                
+                    
                 elif 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):    # condition pour manger une boite de valeur 1 ou 2 
                     res=chemin[0]
-                    direction_prec=res
-                    print(res)
+                    
                 elif valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):    #condition pour savoir si il faut aller chercher un bonus protection                
                     res=chemin[0]
-                    direction_prec=res
-                    print(res)
+                    
                 elif valeur_case==-4 and distance<=2 and not is_surpuissance(num_joueur,l_arene):     #condition pour aller chercher un bonus surpuissance         
                     res=chemin[0]
-                    direction_prec=res
-                    print(res) 
+                    
                 elif valeur_case==-2 and distance==1:       #condition pour chercher un bonus multiplication 
                     res=chemin[0]
-                    direction_prec=res
-                    print(res)  
+                    
                 elif valeur_case==-1 and distance==1:       #condition pour chercher un bonus addition
                     res=chemin[0]
-                    direction_prec=res
-                    print(res) 
+                
     if res == '':    #dernier cas de base, pour ne pas retourner un str vide
         if directions_possibles(l_arene,num_joueur)=='':
             res=car_inverse(direction_prec)  #si le serpent se retouve dans une impasse
-            direction_prec=res
-            print(res)
+            
         else:
             res=random.choice(directions_possibles(l_arene,num_joueur))
-            direction_prec=res
-            print(res)
+
+    direction_prec=res
     return res
 
 
