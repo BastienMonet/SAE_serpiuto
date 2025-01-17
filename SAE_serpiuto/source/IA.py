@@ -409,8 +409,6 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
         distance,valeur_case,numero_joueur=spec       
         if num_joueur==numero_joueur:       #passe les objets qui correspondent a notre serpent
             continue
-        if valeur_case == -5:
-            continue
         if not chemin[0]==car_inverse(direction_prec) or len(arene.get_serpent(l_arene,num_joueur))==1:   #permet de ne pas se manger
             if valeur_case == 1  or valeur_case == -1 or valeur_case == -2 and val_tete == 1 and numero_joueur==0:
                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance: 
@@ -429,11 +427,6 @@ def mon_IA(num_joueur:int, la_partie:dict)->str:
                     return res
             if 1<=valeur_case<=2 and numero_joueur == 0 and val_tete>=valeur_case or is_surpuissance(num_joueur,l_arene):            # condition , si on peut et on a le temps de manger une boite de valeur 1 ou 2 
                 if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:  
-                    res=chemin[0]
-                    direction_prec=res                     
-                    return res
-            if valeur_case==-5 and distance<=3 and not is_protection(num_joueur,l_arene):           #condition , si l'objet le plus proche est un protection et que celui ci est toujours dispo
-                if case.get_val_temps(get_case_from_chemin(chemin, pos_x, pos_y, l_arene))[1]>=distance:                    
                     res=chemin[0]
                     direction_prec=res                     
                     return res
